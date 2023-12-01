@@ -18,11 +18,12 @@ public class FirestationService {
     @Autowired
     private AddressRepository addressRepository;
 
-    public Firestation createFirestation(Firestation firestation){ return firestationRepository.save(firestation);}
+    public Optional<Firestation> getFirestation(Long id){return firestationRepository.findById(id);}
+
+    public Firestation saveFirestation(Firestation firestation){ return firestationRepository.save(firestation);}
 
     public Address addFirestationToAddress(Address address){return addressRepository.save(address);}
 
-    public Optional<Firestation> getFirestation(Long id){return firestationRepository.findById(id);}
 
     public Address deleteMappingFirestation(Long id){
         Optional<Address> address = addressRepository.findById(id);

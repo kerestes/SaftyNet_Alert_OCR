@@ -25,13 +25,16 @@ public class MedicalrecordController {
     @PostMapping("/medicalrecord")
     public Medicalrecord addMedicalrecord(@RequestBody Medicalrecord medicalrecord){
         Medicalrecord newMedicalrecord = medicalrecordService.addMedicalrecord(medicalrecord);
+        List<PatientMedicine> patientMedicines = new ArrayList<>();
         medicalrecord.getMedicines().forEach(patientMedicine -> {
             Medicine medicine = new Medicine();
             medicine.setId(patientMedicine.getMedicineId().getId());
             patientMedicine.setMedicalrecordId(newMedicalrecord);
             patientMedicine.setMedicineId(medicine);
             patientMedicineService.savePatientMedicine(patientMedicine);
+            patientMedicines.add(patientMedicine);
         });
+        newMedicalrecord.setMedicines(patientMedicines);
         return newMedicalrecord;
     }
 
@@ -39,7 +42,17 @@ public class MedicalrecordController {
     public Medicalrecord updateMedicalrecord(@RequestBody Medicalrecord medicalrecord){
         Optional<Medicalrecord> optionalMedicalrecord = medicalrecordService.getMedicalrecord(medicalrecord.getId());
         if(optionalMedicalrecord.isPresent()){
-            return medicalrecordService.addMedicalrecord(medicalrecord);
+            return medicalrecordService.updateMedicalrecord(medicalrecord, optionalMedicalrecord.get());
+        }
+        return null;
+    }
+
+    @PutMapping("/medicalrecord/{id}")
+    public Medicalrecord updateMedicalrecordId(@RequestBody Medicalrecord medicalrecord, @PathVariable Long id){
+        Optional<Medicalrecord> optionalMedicalrecord = medicalrecordService.getMedicalrecord(id);
+        if(optionalMedicalrecord.isPresent()){
+            medicalrecord.setId(id);
+            return medicalrecordService.updateMedicalrecord(medicalrecord, optionalMedicalrecord.get());
         }
         return null;
     }

@@ -5,10 +5,16 @@ import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.Firestation;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.FirestationService;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.logging.Level;
 
 @RestController
 public class FirestationController {
@@ -17,15 +23,32 @@ public class FirestationController {
     private FirestationService firestationService;
     @Autowired
     private AddressService addressService;
+
     @PostMapping("/firestation")
-    public Firestation createFirestation(@RequestBody Firestation firestation){return firestationService.createFirestation(firestation);}
+    public Firestation createFirestation(@RequestBody Firestation firestation){return firestationService.saveFirestation(firestation);}
+
+    @PutMapping("/firestation")
+    public Firestation updateFirestation(@RequestBody Firestation firestation){
+        if(firestation.getId() != 0 && firestationService.getFirestation(firestation.getId()).isPresent())
+            return firestationService.saveFirestation(firestation);
+        return null;
+    }
 
     @PutMapping("/firestation/{id}")
+    public Firestation updateFirestationId(@RequestBody Firestation firestation, @PathVariable Long id){
+        if(id > 0 && firestationService.getFirestation(firestation.getId()).isPresent()){
+            firestation.setId(id);
+            return firestationService.saveFirestation(firestation);
+        }
+        return null;
+    }
+
+    @PutMapping("/firestation/toaddress/{id}")
     public Address addFirestationToAddress(@RequestBody ObjectNode objectNode, @PathVariable Long id){
-        Long addressId = objectNode.get("addressId").asLong();
-        Optional<Firestation> firestation = firestationService.getFirestation(id);
+        Long fistationId = objectNode.get("fistationId").asLong();
+        Optional<Firestation> firestation = firestationService.getFirestation(fistationId);
         if(firestation.isPresent()) {
-            Optional<Address> realAddress = addressService.getAddress(addressId);
+            Optional<Address> realAddress = addressService.getAddress(id);
             if(realAddress.isPresent()){
                 Address address = realAddress.get();
                 address.setFirestation(firestation.get());
@@ -40,7 +63,7 @@ public class FirestationController {
         firestationService.deleteFirestation(id);
     }
 
-    @DeleteMapping("/firestation/mapping/{id}")
+    @DeleteMapping("/firestation/toaddress/{id}")
     public Address deleteMappingFirestation(@PathVariable Long id){
         return firestationService.deleteMappingFirestation(id);
     }

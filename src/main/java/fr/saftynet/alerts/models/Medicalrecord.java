@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,8 +36,8 @@ public class Medicalrecord {
     @JoinTable(name="patient_allergie",
             joinColumns = @JoinColumn(name = "medicalrecord_id", referencedColumnName="id"),
             inverseJoinColumns = @JoinColumn(name = "allergie_id", referencedColumnName="id"))
-    private List<Allergie> allergies;
+    private List<Allergie> allergies = new ArrayList<>();
 
     @OneToMany(mappedBy = "medicalrecordId", cascade = {CascadeType.MERGE})
-    private List<PatientMedicine> medicines;
+    private List<PatientMedicine> medicines = new ArrayList<>();
 }
