@@ -1,62 +1,92 @@
 package fr.saftynet.alerts.controllers;
 
-import fr.saftynet.alerts.models.Medicalrecord;
+import ch.qos.logback.classic.Logger;
+import com.fasterxml.jackson.databind.JsonNode;
+import fr.saftynet.alerts.models.Allergy;
 import fr.saftynet.alerts.models.Medicine;
 import fr.saftynet.alerts.models.PatientMedicine;
-import fr.saftynet.alerts.services.MedicalrecordService;
+import fr.saftynet.alerts.models.Person;
+import fr.saftynet.alerts.services.AllergyService;
+import fr.saftynet.alerts.services.MedicineService;
 import fr.saftynet.alerts.services.PatientMedicineService;
+import fr.saftynet.alerts.services.PersonService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class MedicalrecordController {
 
     @Autowired
-    private MedicalrecordService medicalrecordService;
+    private PersonService personService;
 
     @Autowired
     private PatientMedicineService patientMedicineService;
 
-    @PostMapping("/medicalrecord")
-    public Medicalrecord addMedicalrecord(@RequestBody Medicalrecord medicalrecord){
-        Medicalrecord newMedicalrecord = medicalrecordService.addMedicalrecord(medicalrecord);
-        List<PatientMedicine> patientMedicines = new ArrayList<>();
-        medicalrecord.getMedicines().forEach(patientMedicine -> {
-            Medicine medicine = new Medicine();
-            medicine.setId(patientMedicine.getMedicineId().getId());
-            patientMedicine.setMedicalrecordId(newMedicalrecord);
-            patientMedicine.setMedicineId(medicine);
-            patientMedicineService.savePatientMedicine(patientMedicine);
-            patientMedicines.add(patientMedicine);
-        });
-        newMedicalrecord.setMedicines(patientMedicines);
-        return newMedicalrecord;
-    }
+    @Autowired
+    private MedicineService medicineService;
 
-    @PutMapping("/medicalrecord")
-    public Medicalrecord updateMedicalrecord(@RequestBody Medicalrecord medicalrecord){
-        Optional<Medicalrecord> optionalMedicalrecord = medicalrecordService.getMedicalrecord(medicalrecord.getId());
-        if(optionalMedicalrecord.isPresent()){
-            return medicalrecordService.updateMedicalrecord(medicalrecord, optionalMedicalrecord.get());
+    @Autowired
+    private AllergyService allergyService;
+
+    Logger logger = (Logger) LoggerFactory.getLogger(MedicalrecordController.class);
+
+    @PutMapping("/medicine/{personId}")
+    public Person addMedicine(@PathVariable Long personId, @RequestBody JsonNode medicineRequest){
+        int quantity;
+        Long realMedicineId = medicineRequest.get("medicineId").asLong();
+        Optional<Person> person = personService.getPerson(personId);
+        Optional<Medicine> medicine = medicineService.getMedicine(realMedicineId);
+        if(person.isPresent() && medicine.isPresent()){
+            PatientMedicine patientMedicine = patientMedicineService.getPatientMedicineByPersonId(person.get(), medicine.get());
+
+            if(medicineRequest.has("quantity") || medicineRequest.get("quantity").asInt() != 0)
+                quantity = medicineRequest.get("quantity").asInt();
+            else
+                quantity = 1;
+
+            if(patientMedicine != null && patientMedicine.getMedicineId().getId() == medicine.get().getId()) {
+                patientMedicine.setQuantity(quantity);
+            } else {
+                PatientMedicine newPatientMedicine = new PatientMedicine();
+                newPatientMedicine.setQuantity(quantity);
+                newPatientMedicine.setPersonId(person.get());
+                newPatientMedicine.setMedicineId(medicine.get());
+                patientMedicineService.savePatientMedicine(newPatientMedicine);
+            }
+            return personService.getPerson(personId).get();
         }
         return null;
     }
 
-    @PutMapping("/medicalrecord/{id}")
-    public Medicalrecord updateMedicalrecordId(@RequestBody Medicalrecord medicalrecord, @PathVariable Long id){
-        Optional<Medicalrecord> optionalMedicalrecord = medicalrecordService.getMedicalrecord(id);
-        if(optionalMedicalrecord.isPresent()){
-            medicalrecord.setId(id);
-            return medicalrecordService.updateMedicalrecord(medicalrecord, optionalMedicalrecord.get());
+    @PutMapping("/allergy/{personId}")
+    public Person addAllergy(@PathVariable Long personId, @RequestBody JsonNode allergyRequest){
+        boolean verified = false;
+        Optional<Person> optionalPerson = personService.getPerson(personId);
+        Long allergyId = allergyRequest.get("allergyId").asLong();
+        if(optionalPerson.isPresent()){
+            Allergy newAllergy = new Allergy();
+            newAllergy.setId(allergyId);
+            Person p = optionalPerson.get();
+            Optional<Allergy> allergy = allergyService.getAllergy(allergyId);
+            if(allergy.isPresent() && p.getAllergies().contains(allergy.get()))
+                return p;
+            p.getAllergies().add(allergy.get());
+            return personService.savePerson(p);
         }
         return null;
     }
 
-    @DeleteMapping("/medicalrecord/{id}")
-    public void deleteMedicalrecord(@PathVariable final Long id){medicalrecordService.deleteMedicalrecord(id);}
+    @DeleteMapping("/medicine/{personId}/{medicineId}")
+    public void deleteMedicine(@PathVariable Long personId, @PathVariable Long medicineId){
+        patientMedicineService.deletePatientMedicine(personId, medicineId);
+    }
+
+    @DeleteMapping("/allergy/{personId}/{allergyId}")
+    public void deleteAllergie(@PathVariable Long personId, @PathVariable Long allergyId){
+        allergyService.deleteAllergy(personId, allergyId);
+    }
+
 }

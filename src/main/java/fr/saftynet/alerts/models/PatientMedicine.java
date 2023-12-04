@@ -21,6 +21,6 @@ public class PatientMedicine {
     private Medicine medicineId;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "medicalrecord_id")
-    private Medicalrecord medicalrecordId;
+    @JoinColumn(name = "person_id")
+    private Person personId;
 }

@@ -21,7 +21,8 @@ public class PersonService {
                 && person.getFirstName() != null && !person.getFirstName().isEmpty()
                 && person.getLastName() != null && !person.getLastName().isEmpty()
                 && person.getPhone() != null && !person.getPhone().isEmpty()
-                && person.getEmail() != null && !person.getEmail().isEmpty())
+                && person.getEmail() != null && !person.getEmail().isEmpty()
+                && person.getBirthday() != null)
             return personRepository.save(person);
         return null;
     }
@@ -35,10 +36,14 @@ public class PersonService {
                 person.setLastName(optinalPerson.get().getLastName());
             if (person.getAddress() == null)
                 person.setAddress(optinalPerson.get().getAddress());
+            if(person.getBirthday() == null)
+                person.setBirthday(optinalPerson.get().getBirthday());
             if (person.getPhone() == null || person.getPhone().isEmpty())
                 person.setPhone(optinalPerson.get().getPhone());
             if (person.getEmail() == null || person.getEmail().isEmpty())
                 person.setEmail(optinalPerson.get().getEmail());
+            person.setMedicines(optinalPerson.get().getMedicines());
+            person.setAllergies(optinalPerson.get().getAllergies());
             return savePerson(person);
         }
         return null;

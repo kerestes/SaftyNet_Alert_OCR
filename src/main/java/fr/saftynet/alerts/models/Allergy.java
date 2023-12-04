@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Allergie {
+public class Allergy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
