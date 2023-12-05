@@ -12,7 +12,7 @@ public class PatientMedicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private long id;
+    private Long id;
 
     private int quantity = 1;
 

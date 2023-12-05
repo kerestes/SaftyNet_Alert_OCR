@@ -1,5 +1,6 @@
 package fr.saftynet.alerts.repositories;
 
+import fr.saftynet.alerts.constans.DBConstants;
 import fr.saftynet.alerts.models.Allergy;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AllergyRepository extends CrudRepository<Allergy, Long> {
     @Transactional
     @Modifying
-    @Query(value = "DELETE FROM patient_allergy where person_id = :personId AND allergy_id = :allergyId", nativeQuery = true)
-    void deleteAllergy(Long personId, Long allergyId);
+    @Query(value = DBConstants.deleteAllergy, nativeQuery = true)
+    void deleteAllergy(final Long personId, final Long allergyId);
 }

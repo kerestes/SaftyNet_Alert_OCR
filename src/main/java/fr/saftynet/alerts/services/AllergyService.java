@@ -13,7 +13,7 @@ public class AllergyService {
     @Autowired
     AllergyRepository allergyRepository;
 
-    public Optional<Allergy> getAllergy(Long id){ return allergyRepository.findById(id);}
+    public Optional<Allergy> getAllergy(final Long id){ return allergyRepository.findById(id);}
 
-    public void deleteAllergy(Long personId, Long allergyId){allergyRepository.deleteAllergy(personId, allergyId);}
+    public void deleteAllergy(final Long personId, final Long allergyId){allergyRepository.deleteAllergy(personId, allergyId);}
 }

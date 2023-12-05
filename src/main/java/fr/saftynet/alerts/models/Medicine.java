@@ -13,12 +13,10 @@ import lombok.Data;
 public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column
     private String name;
 
-    @Column
     private int dosage_mg;
 
 }

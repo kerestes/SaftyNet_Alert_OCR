@@ -2,16 +2,12 @@ package fr.saftynet.alerts.controllers;
 
 import ch.qos.logback.classic.Logger;
 import com.fasterxml.jackson.databind.JsonNode;
-import fr.saftynet.alerts.models.Allergy;
-import fr.saftynet.alerts.models.Medicine;
-import fr.saftynet.alerts.models.PatientMedicine;
-import fr.saftynet.alerts.models.Person;
-import fr.saftynet.alerts.services.AllergyService;
-import fr.saftynet.alerts.services.MedicineService;
-import fr.saftynet.alerts.services.PatientMedicineService;
-import fr.saftynet.alerts.services.PersonService;
+import fr.saftynet.alerts.models.*;
+import fr.saftynet.alerts.services.*;
+import fr.saftynet.alerts.utilities.PersonUtility;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -21,17 +17,32 @@ public class MedicalrecordController {
 
     @Autowired
     private PersonService personService;
-
     @Autowired
     private PatientMedicineService patientMedicineService;
-
     @Autowired
     private MedicineService medicineService;
-
     @Autowired
     private AllergyService allergyService;
 
+    @Autowired
+    private AddressService addressService;
+
     Logger logger = (Logger) LoggerFactory.getLogger(MedicalrecordController.class);
+
+    @GetMapping("/fire")
+    public Address getPersonByAddressWithMedicalRecords(@Param("address") String address){
+        Optional<Address> optionalAddress = addressService.getAddressByName(address);
+        if(optionalAddress.isPresent()){
+            Address realAddress = optionalAddress.get();
+            for (Person person: realAddress.getPersons()){
+                person.setAge(PersonUtility.getAge(person.getBirthday()));
+                person.setBirthday(null);
+                person.setEmail(null);
+            }
+            return realAddress;
+        }
+        return null;
+    }
 
     @PutMapping("/medicine/{personId}")
     public Person addMedicine(@PathVariable Long personId, @RequestBody JsonNode medicineRequest){
@@ -56,6 +67,7 @@ public class MedicalrecordController {
                 newPatientMedicine.setMedicineId(medicine.get());
                 patientMedicineService.savePatientMedicine(newPatientMedicine);
             }
+
             return personService.getPerson(personId).get();
         }
         return null;
@@ -63,7 +75,6 @@ public class MedicalrecordController {
 
     @PutMapping("/allergy/{personId}")
     public Person addAllergy(@PathVariable Long personId, @RequestBody JsonNode allergyRequest){
-        boolean verified = false;
         Optional<Person> optionalPerson = personService.getPerson(personId);
         Long allergyId = allergyRequest.get("allergyId").asLong();
         if(optionalPerson.isPresent()){

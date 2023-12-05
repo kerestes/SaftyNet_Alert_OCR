@@ -5,6 +5,7 @@ import fr.saftynet.alerts.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,6 +17,12 @@ public class PersonService {
 
     public Optional<Person> getPerson(final Long id){return personRepository.findById(id);}
 
+    public List<String> getEmailPerCity(final String cityName) {return personRepository.getEmailPerCity(cityName);}
+
+    public List<Person> getListPersonByAddress(final Long address_id){return personRepository.getListPersonByAddress(address_id);}
+
+    public void delete(final Long id){personRepository.deleteById(id);}
+
     public Person savePerson(Person person){
         if (person.getAddress() != null
                 && person.getFirstName() != null && !person.getFirstName().isEmpty()
@@ -26,28 +33,5 @@ public class PersonService {
             return personRepository.save(person);
         return null;
     }
-
-    public Person updatePerson(Person person){
-        Optional<Person> optinalPerson = getPerson(person.getId());
-        if (optinalPerson.isPresent()) {
-            if (person.getFirstName() == null || person.getFirstName().isEmpty())
-                person.setFirstName(optinalPerson.get().getFirstName());
-            if (person.getLastName() == null || person.getLastName().isEmpty())
-                person.setLastName(optinalPerson.get().getLastName());
-            if (person.getAddress() == null)
-                person.setAddress(optinalPerson.get().getAddress());
-            if(person.getBirthday() == null)
-                person.setBirthday(optinalPerson.get().getBirthday());
-            if (person.getPhone() == null || person.getPhone().isEmpty())
-                person.setPhone(optinalPerson.get().getPhone());
-            if (person.getEmail() == null || person.getEmail().isEmpty())
-                person.setEmail(optinalPerson.get().getEmail());
-            person.setMedicines(optinalPerson.get().getMedicines());
-            person.setAllergies(optinalPerson.get().getAllergies());
-            return savePerson(person);
-        }
-        return null;
-    }
-    public void delete(final long id){personRepository.deleteById(id);}
 
 }

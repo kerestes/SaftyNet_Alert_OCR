@@ -13,9 +13,9 @@ public class PatientMedicineService {
     @Autowired
     private PatientMedicineRepository patientMedicineRepository;
 
-    public PatientMedicine getPatientMedicineByPersonId(Person person, Medicine medicine){return patientMedicineRepository.getPatientMedicineByPersonId(person, medicine);}
+    public PatientMedicine getPatientMedicineByPersonId(final Person person, final Medicine medicine){return patientMedicineRepository.getPatientMedicineByPersonId(person, medicine);}
 
-    public PatientMedicine savePatientMedicine(PatientMedicine patientMedicine){return patientMedicineRepository.save(patientMedicine);}
+    public PatientMedicine savePatientMedicine(final PatientMedicine patientMedicine){return patientMedicineRepository.save(patientMedicine);}
 
-    public void deletePatientMedicine(Long personId, Long medicineId){patientMedicineRepository.deletePatientMedicine(personId, medicineId);}
+    public void deletePatientMedicine(final Long personId, final Long medicineId){patientMedicineRepository.deletePatientMedicine(personId, medicineId);}
 }

@@ -1,7 +1,6 @@
 package fr.saftynet.alerts.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,11 +13,12 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name="first_name")
     private String firstName;
@@ -26,15 +26,13 @@ public class Person {
     @Column(name="last_name")
     private String lastName;
 
-    @OneToOne
-    private Address address;
-
     private Date birthday;
 
-    @Column
+    @Transient
+    private Integer age = null;
+
     private String phone;
 
-    @Column
     private String email;
 
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
@@ -45,5 +43,10 @@ public class Person {
 
     @OneToMany(mappedBy = "personId", cascade = {CascadeType.MERGE})
     private List<PatientMedicine> medicines = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "address_id")
+    @JsonBackReference
+    private Address address;
 
 }
