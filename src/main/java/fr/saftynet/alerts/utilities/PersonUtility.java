@@ -1,10 +1,14 @@
 package fr.saftynet.alerts.utilities;
 
+import fr.saftynet.alerts.models.Address;
+import fr.saftynet.alerts.models.Medicine;
+import fr.saftynet.alerts.models.PatientMedicine;
 import fr.saftynet.alerts.models.Person;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PersonUtility {
 
@@ -36,5 +40,11 @@ public class PersonUtility {
         personUpdate.setMedicines(personOld.getMedicines());
         personUpdate.setAllergies(personOld.getAllergies());
         return personUpdate;
+    }
+
+    public static Person changeBirthdayForAge(Person person){
+        person.setAge(getAge(person.getBirthday()));
+        person.setBirthday(null);
+        return person;
     }
 }

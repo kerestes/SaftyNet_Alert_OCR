@@ -19,8 +19,6 @@ public class PersonService {
 
     public List<String> getEmailPerCity(final String cityName) {return personRepository.getEmailPerCity(cityName);}
 
-    public List<Person> getListPersonByAddress(final Long address_id){return personRepository.getListPersonByAddress(address_id);}
-
     public void delete(final Long id){personRepository.deleteById(id);}
 
     public Person savePerson(Person person){

@@ -11,9 +11,6 @@ import java.util.List;
 @Repository
 public interface PersonRepository extends CrudRepository<Person, Long> {
 
-    @Query(DBConstants.getListPersonByAddress)
-    List<Person> getListPersonByAddress(final Long address_id);
-
     @Query(DBConstants.getEmailPerCity)
     List<String> getEmailPerCity(final String cityName);
 }

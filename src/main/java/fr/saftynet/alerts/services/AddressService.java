@@ -13,6 +13,7 @@ public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
+    public Optional<String> getCity(String city){return addressRepository.getCity(city);}
     public Optional<Address> getAddress(final Long id){return addressRepository.findById(id);}
 
     public List<Address> getPersonByLastName(final String lastName){return addressRepository.getPersonByLastName(lastName);}

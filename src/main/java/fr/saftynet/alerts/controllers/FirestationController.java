@@ -7,6 +7,8 @@ import fr.saftynet.alerts.models.Firestation;
 import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.FirestationService;
+import fr.saftynet.alerts.utilities.AddressUtility;
+import fr.saftynet.alerts.utilities.FirestationUtility;
 import fr.saftynet.alerts.utilities.PersonUtility;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +29,11 @@ public class FirestationController {
 
 
     @GetMapping("/phoneAlert")
-    public HashMap<String, List<String>> getPhoneNumberPerFirestation(@Param("firestation") Long firestation){
-        Optional<Firestation> realFirestation = firestationService.getFirestation(firestation);
+    public HashMap<String, Set<String>> getPhoneNumberPerFirestation(@Param("firestationId") Long firestationId){
+        Optional<Firestation> realFirestation = firestationService.getFirestation(firestationId);
         if(realFirestation.isPresent()){
-            List<Address> addresses = firestationService.getPersonsPerFirestation(firestation);
-            List<String> phones = new ArrayList<>();
-            for(Address address: addresses){
-                for(Person person: address.getPersons()){
-                    if(!phones.contains(person.getPhone()))
-                        phones.add(person.getPhone());
-                }
-            }
-            HashMap<String, List<String>> returnHashMap = new HashMap<>();
-            returnHashMap.put(realFirestation.get().getName(), phones);
+            HashMap<String, Set<String>> returnHashMap = new HashMap<>();
+            returnHashMap.put(realFirestation.get().getName(),  FirestationUtility.getPhones(firestationService.getPersonsPerFirestation(firestationId)));
             return returnHashMap;
         }
         return null;
@@ -49,24 +43,7 @@ public class FirestationController {
     public List<Address> getListPerson(@Param("stationNumber") Long stationNumber){
         if(stationNumber != null){
             List<Address> addresses = firestationService.getPersonsPerFirestation(stationNumber);
-            for(Address address: addresses){
-                address.setMinor(new ArrayList<>());
-                address.setMajor(new ArrayList<>());
-                for(Person person: address.getPersons()){
-                    int age = PersonUtility.getAge(person.getBirthday());
-                    person.setBirthday(null);
-                    person.setEmail(null);
-                    person.setAllergies(null);
-                    person.setMedicines(null);
-                    person.getAddress().setFirestation(null);
-                    if (age > 18)
-                        address.getMinor().add(person);
-                    else
-                        address.getMajor().add(person);
-                }
-                address.setPersons(null);
-            }
-            return addresses;
+            return AddressUtility.setMinorAndMajorList(addresses);
         }
         return null;
     }
@@ -85,7 +62,7 @@ public class FirestationController {
 
     @PutMapping("/firestation/{id}")
     public Firestation updateFirestationId(@RequestBody Firestation firestation, @PathVariable Long id){
-        if(id > 0 && firestationService.getFirestation(firestation.getId()).isPresent()){
+        if(id > 0 && firestationService.getFirestation(id).isPresent()){
             firestation.setId(id);
             return firestationService.saveFirestation(firestation);
         }
@@ -99,9 +76,8 @@ public class FirestationController {
         if(firestation.isPresent()) {
             Optional<Address> realAddress = addressService.getAddress(id);
             if(realAddress.isPresent()){
-                Address address = realAddress.get();
-                address.setFirestation(firestation.get());
-                address = firestationService.addFirestationToAddress(address);
+                realAddress.get().setFirestation(firestation.get());
+                Address address = firestationService.addFirestationToAddress(realAddress.get());
                 address.setPersons(null);
                 return address;
             }
@@ -115,8 +91,8 @@ public class FirestationController {
     }
 
     @DeleteMapping("/firestation/toaddress/{id}")
-    public Address deleteMappingFirestation(@PathVariable Long id){
-        return firestationService.deleteMappingFirestation(id);
+    public void deleteMappingFirestation(@PathVariable Long id){
+        firestationService.deleteMappingFirestation(id);
     }
 
 }

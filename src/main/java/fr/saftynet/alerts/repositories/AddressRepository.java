@@ -12,6 +12,9 @@ import java.util.Optional;
 @Repository
 public interface AddressRepository extends CrudRepository<Address, Long> {
 
+    @Query(value = DBConstants.getCity, nativeQuery = true)
+    Optional<String> getCity(String city);
+
     @Query(value = DBConstants.getAddressByName, nativeQuery = true)
     Optional<Address> getAddressByName(final String addressName);
 

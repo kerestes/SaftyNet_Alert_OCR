@@ -31,14 +31,11 @@ public class FirestationService {
 
     public List<Address> getPersonsPerFirestation(final Long id){return firestationRepository.personsPerFirestation(id);}
 
-    public Address deleteMappingFirestation(final Long id){
+    public void deleteMappingFirestation(final Long id){
         Optional<Address> address = addressRepository.findById(id);
         if(address.isPresent()) {
-            Address realAddress = address.get();
-            realAddress.setFirestation(null);
-            return addressRepository.save(realAddress);
-        } else {
-            return null;
+            address.get().setFirestation(null);
+            addressRepository.save(address.get());
         }
     }
 }

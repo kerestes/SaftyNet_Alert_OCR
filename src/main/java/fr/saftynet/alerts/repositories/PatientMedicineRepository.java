@@ -10,11 +10,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 public interface PatientMedicineRepository extends CrudRepository<PatientMedicine, Long> {
 
     @Query(DBConstants.getPatientMedicineByPersonId)
-    PatientMedicine getPatientMedicineByPersonId(final Person person, final Medicine medicine);
+    Optional<PatientMedicine> getPatientMedicineByPersonId(final Person person, final Medicine medicine);
 
     @Modifying
     @Transactional
