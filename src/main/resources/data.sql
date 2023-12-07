@@ -61,7 +61,7 @@ CREATE TABLE patient_allergy (
 	FOREIGN KEY (allergy_id) REFERENCES allergy(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-INSERT INTO firestation (name) VALUES ("Fire Station 1"), ("Fire Station 2"), ("Fire Station 3"), ("Fire Station 4");
+INSERT INTO firestation (name) VALUES ("Firestation 1"), ("Firestation 2"), ("Firestation 3"), ("Firestation 4");
 
 INSERT INTO address (address, city, zip, firestation_id) VALUES ("1509 Culver St", "Culver", "97451", 3), ("29 15th St", "Culver", "97451", 2), ("834 Binoc Ave", "Culver", "97451", 3), ("644 Gershwin Cir", "Culver", "97451", 1), ("748 Townings Dr", "Culver", "97451", 3), ("112 Steppes Pl", "Culver", "97451", 4), ("489 Manchester St", "Culver", "97451", 4), ("892 Downing Ct", "Culver", "97451", 2), ("908 73rd St", "Culver", "97451", 1), ("947 E. Rose Dr", "Culver", "97451", 1), ("951 LoneTree Rd", "Culver", "97451", 1);
 
