@@ -40,7 +40,10 @@ public class PersonController {
     @GetMapping("/communityEmail")
     public Map<String, List<String>> getEmailPerCity(@Param("city") String city){
         Optional<String> cityName = addressService.getCity(city);
-        return cityName.map(s -> Map.of("Emails from " + s, personService.getEmailPerCity(s))).orElse(null);
+        if(cityName.isPresent()){
+            return cityName.map(s -> Map.of("Emails from " + s, personService.getEmailPerCity(s))).orElse(null);
+        }
+        return null;
     }
 
     @GetMapping("/childAlert")

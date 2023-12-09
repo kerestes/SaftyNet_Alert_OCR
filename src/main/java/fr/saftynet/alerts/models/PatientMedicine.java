@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Objects;
+
 @Data
 @Entity
 @Table(name="patient_medicine")
@@ -23,4 +25,11 @@ public class PatientMedicine {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "person_id")
     private Person personId;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PatientMedicine that)) return false;
+        return Objects.equals(medicineId, that.medicineId) && Objects.equals(personId, that.personId);
+    }
 }

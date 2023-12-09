@@ -7,6 +7,7 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -41,7 +42,7 @@ public class Person {
             inverseJoinColumns = @JoinColumn(name = "allergy_id", referencedColumnName="id"))
     private List<Allergy> allergies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "personId", cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "personId", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<PatientMedicine> medicines = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -49,4 +50,15 @@ public class Person {
     @JsonBackReference
     private Address address;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person person)) return false;
+        return Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName);
+    }
 }

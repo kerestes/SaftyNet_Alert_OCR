@@ -71,8 +71,8 @@ public class FirestationController {
 
     @PutMapping("/firestation/toaddress/{id}")
     public Address addFirestationToAddress(@RequestBody ObjectNode objectNode, @PathVariable Long id){
-        Long fistationId = objectNode.get("firestationId").asLong();
-        Optional<Firestation> firestation = firestationService.getFirestation(fistationId);
+        Long firestationId = objectNode.get("firestationId").asLong();
+        Optional<Firestation> firestation = firestationService.getFirestation(firestationId);
         if(firestation.isPresent()) {
             Optional<Address> realAddress = addressService.getAddress(id);
             if(realAddress.isPresent()){

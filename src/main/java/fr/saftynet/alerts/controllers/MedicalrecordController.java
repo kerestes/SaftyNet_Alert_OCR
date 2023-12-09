@@ -71,7 +71,7 @@ public class MedicalrecordController {
         Long allergyId = allergyRequest.get("allergyId").asLong();
         Optional<Allergy> optionalAllergy = allergyService.getAllergy(allergyId);
         if(optionalPerson.isPresent() && optionalAllergy.isPresent()){
-            return personService.savePerson(MedicalRecordUtility.addAllergie(optionalPerson.get(), optionalAllergy.get(), allergyId));
+            return personService.savePerson(MedicalRecordUtility.addAllergie(optionalPerson.get(), optionalAllergy.get()));
         }
         return null;
     }

@@ -28,7 +28,7 @@ public class MedicalRecordUtility {
         return newPatientMedicine;
     }
 
-    public static Person addAllergie(Person person, Allergy allergy, Long allergyId){
+    public static Person addAllergie(Person person, Allergy allergy){
         if(!person.getAllergies().contains(allergy))
             person.getAllergies().add(allergy);
         return person;
