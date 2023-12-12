@@ -2,14 +2,11 @@ package fr.saftynet.alerts.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-@Data
+@Getter
+@Setter
 @Entity
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -36,13 +33,13 @@ public class Person {
 
     private String email;
 
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="patient_allergy",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName="id"),
             inverseJoinColumns = @JoinColumn(name = "allergy_id", referencedColumnName="id"))
     private List<Allergy> allergies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "personId", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "personId", fetch = FetchType.EAGER)
     private List<PatientMedicine> medicines = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -57,8 +54,4 @@ public class Person {
         return Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName);
-    }
 }

@@ -1,24 +1,26 @@
 package fr.saftynet.alerts.utilities;
 
-import fr.saftynet.alerts.models.Address;
-import fr.saftynet.alerts.models.Medicine;
-import fr.saftynet.alerts.models.PatientMedicine;
 import fr.saftynet.alerts.models.Person;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PersonUtility {
 
+    private static final Logger logger = LogManager.getLogger();
+
     public static int getAge(Date birthday){
+        logger.debug("Converting birthday(Date) into age(int)");
         LocalDate today = LocalDate.now();
         LocalDate birthdayDate =  birthday.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return birthdayDate.until(today).getYears();
     }
 
     public static Person createUpdate(Person personUpdate, Person personOld) {
+        logger.debug("Merging saved person (" + personOld.getFirstName() + " " + personOld.getLastName() + ") with updated information");
         if (personUpdate.getFirstName() == null || personUpdate.getFirstName().isEmpty())
             personUpdate.setFirstName(personOld.getFirstName());
 
@@ -43,6 +45,7 @@ public class PersonUtility {
     }
 
     public static Person changeBirthdayForAge(Person person){
+        logger.debug("Setting null birthday(Date) and converting into age(int)");
         person.setAge(getAge(person.getBirthday()));
         person.setBirthday(null);
         return person;

@@ -63,7 +63,7 @@ public class MedicalRecordUtilityTest {
         allergy.setName("peanut");
         Person person = new Person();
 
-        person = MedicalRecordUtility.addAllergie(person, allergy);
+        person = MedicalRecordUtility.addAllergy(person, allergy);
 
         Assertions.assertTrue(person.getAllergies().contains(allergy));
         Assertions.assertEquals("peanut", person.getAllergies().get(0).getName());

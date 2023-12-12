@@ -21,15 +21,6 @@ public class PersonService {
 
     public void delete(final Long id){personRepository.deleteById(id);}
 
-    public Person savePerson(Person person){
-        if (person.getAddress() != null
-                && person.getFirstName() != null && !person.getFirstName().isEmpty()
-                && person.getLastName() != null && !person.getLastName().isEmpty()
-                && person.getPhone() != null && !person.getPhone().isEmpty()
-                && person.getEmail() != null && !person.getEmail().isEmpty()
-                && person.getBirthday() != null)
-            return personRepository.save(person);
-        return null;
-    }
+    public Person savePerson(Person person){ return personRepository.save(person);}
 
 }

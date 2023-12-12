@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <properties>
+        <property name="log-path">logs</property>
+        <property name="archive">${log-path}/archive</property>
+    </properties>
+    <appenders>
+        <console name="Console-Appender" target="SYSTEM_OUT">
+            <patternlayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>>
+            </patternlayout>
+        </console>
+        <file name="File-Appender" filename="${log-path}/xmlfilelog.log">
+            <patternlayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>
+            </patternlayout>
+        </file>
+    </appenders>
+    <loggers>
+        <logger name="fr.saftynet.alerts" level="debug" additivity="false">
+            <appenderref ref="File-Appender" level="debug"/>
+            <appenderref ref="Console-Appender" level="debug"/>
+        </logger>
+        <root level="warn">
+            <appenderref ref="Console-Appender">
+            </appenderref>
+        </root>
+    </loggers>
+</configuration>
