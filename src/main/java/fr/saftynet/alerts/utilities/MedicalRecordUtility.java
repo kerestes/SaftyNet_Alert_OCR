@@ -8,14 +8,13 @@ import fr.saftynet.alerts.models.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MedicalRecordUtility {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(MedicalRecordUtility.class);
 
     public static List<PatientMedicine> createMedicalRecordForNewPerson(List<PatientMedicine> patientMedicines, Person person){
         logger.debug("Creating a medical record to " + person.getFirstName() + " " + person.getLastName());

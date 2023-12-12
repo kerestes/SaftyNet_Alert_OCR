@@ -1,8 +1,6 @@
 package fr.saftynet.alerts.utilities;
 
 import fr.saftynet.alerts.models.Address;
-import fr.saftynet.alerts.models.Firestation;
-import fr.saftynet.alerts.models.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class FirestationUtility {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(FirestationUtility.class);
 
     public static Set<String> getPhones(List<Address> addresses){
         return addresses.stream()

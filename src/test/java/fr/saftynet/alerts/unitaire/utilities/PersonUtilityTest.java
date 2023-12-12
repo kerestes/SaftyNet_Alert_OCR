@@ -1,6 +1,7 @@
-package fr.saftynet.alerts.unitaire;
+package fr.saftynet.alerts.unitaire.utilities;
 import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.utilities.PersonUtility;
+import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,11 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class PersonUtilityTest {
+
+    LogCaptor logCaptor = LogCaptor.forClass(PersonUtility.class);
     @Test
     public void getAgeTest(){
         LocalDate localDate = LocalDate.now();
@@ -17,6 +22,7 @@ public class PersonUtilityTest {
         Date date = calendar.getTime();
 
         Assertions.assertEquals(17, PersonUtility.getAge(date));
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Converting birthday(Date) into age(int)"));
     }
 
     @Test
@@ -35,6 +41,7 @@ public class PersonUtilityTest {
 
         Assertions.assertEquals("DUPONT", personUpdate.getLastName());
         Assertions.assertEquals("Alexandre", personUpdate.getFirstName());
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Merging saved person"));
     }
 
     @Test
@@ -49,6 +56,7 @@ public class PersonUtilityTest {
 
         Assertions.assertEquals("KERESTES", personUpdate.getLastName());
         Assertions.assertEquals("Alexandre", personUpdate.getFirstName());
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Merging saved person"));
     }
 
     @Test
@@ -68,5 +76,6 @@ public class PersonUtilityTest {
 
         Assertions.assertEquals(17, person.getAge());
         Assertions.assertNull(person.getBirthday());
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Setting null birthday(Date) and converting into age(int)"));
     }
 }

@@ -1,16 +1,19 @@
-package fr.saftynet.alerts.unitaire;
+package fr.saftynet.alerts.unitaire.utilities;
 
 import fr.saftynet.alerts.models.Allergy;
 import fr.saftynet.alerts.models.Medicine;
 import fr.saftynet.alerts.models.PatientMedicine;
 import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.utilities.MedicalRecordUtility;
-import org.junit.jupiter.api.Assertions;
+import nl.altindag.log.LogCaptor;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 public class MedicalRecordUtilityTest {
+
+    LogCaptor logCaptor = LogCaptor.forClass(MedicalRecordUtility.class);
 
     @Test
     public void createMedicalRecordForNewPersonTest(){
@@ -33,10 +36,11 @@ public class MedicalRecordUtilityTest {
         boolean resultMedicinePersonId3 = person.getMedicines().stream().anyMatch(patientMedicine -> patientMedicine.getMedicineId().getId() == 30L);
         boolean resultMedicinePersonId4 = person.getMedicines().stream().anyMatch(patientMedicine -> patientMedicine.getMedicineId().getId() == 1L);
 
-        Assertions.assertTrue(resultMedicinePersonId1);
-        Assertions.assertTrue(resultMedicinePersonId2);
-        Assertions.assertTrue(resultMedicinePersonId3);
-        Assertions.assertFalse(resultMedicinePersonId4);
+        assertTrue(resultMedicinePersonId1);
+        assertTrue(resultMedicinePersonId2);
+        assertTrue(resultMedicinePersonId3);
+        assertFalse(resultMedicinePersonId4);
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Creating a medical record to"));
     }
 
     @Test
@@ -51,9 +55,10 @@ public class MedicalRecordUtilityTest {
 
         PatientMedicine patientMedicine = MedicalRecordUtility.addMedicine(quantity, person, medicine);
 
-        Assertions.assertEquals("KERESTES", patientMedicine.getPersonId().getLastName());
-        Assertions.assertEquals(1, patientMedicine.getQuantity());
-        Assertions.assertEquals("Doliprane", patientMedicine.getMedicineId().getName());
+        assertEquals("KERESTES", patientMedicine.getPersonId().getLastName());
+        assertEquals(1, patientMedicine.getQuantity());
+        assertEquals("Doliprane", patientMedicine.getMedicineId().getName());
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Connecting person"));
     }
 
     @Test
@@ -65,8 +70,9 @@ public class MedicalRecordUtilityTest {
 
         person = MedicalRecordUtility.addAllergy(person, allergy);
 
-        Assertions.assertTrue(person.getAllergies().contains(allergy));
-        Assertions.assertEquals("peanut", person.getAllergies().get(0).getName());
+        assertTrue(person.getAllergies().contains(allergy));
+        assertEquals("peanut", person.getAllergies().get(0).getName());
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Adding allergy"));
     }
 
     @Test
@@ -87,12 +93,13 @@ public class MedicalRecordUtilityTest {
         person.setAllergies(Arrays.asList(allergy));
         person.setMedicines(Arrays.asList(patientMedicine));
 
-        Assertions.assertTrue(person.getMedicines().contains(patientMedicine));
-        Assertions.assertEquals(1L, person.getMedicines().get(0).getMedicineId().getId());
+        assertTrue(person.getMedicines().contains(patientMedicine));
+        assertEquals(1L, person.getMedicines().get(0).getMedicineId().getId());
 
         person = MedicalRecordUtility.setNullMecialRecord(person);
 
-        Assertions.assertNull(person.getAllergies());
-        Assertions.assertNull(person.getMedicines());
+        assertNull(person.getAllergies());
+        assertNull(person.getMedicines());
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Setting allergies and medicines to null"));
     }
 }

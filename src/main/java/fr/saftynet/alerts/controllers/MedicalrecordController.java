@@ -36,7 +36,7 @@ public class MedicalrecordController {
 
     ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(MedicalrecordController.class);
 
     @GetMapping("/fire")
     public JsonNode getPersonByAddressWithMedicalRecords(@Param("address") final String address, HttpServletRequest request){

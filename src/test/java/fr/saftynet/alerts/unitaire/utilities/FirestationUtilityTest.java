@@ -1,9 +1,10 @@
-package fr.saftynet.alerts.unitaire;
+package fr.saftynet.alerts.unitaire.utilities;
 
 import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.utilities.FirestationUtility;
-import org.junit.jupiter.api.Assertions;
+import nl.altindag.log.LogCaptor;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,7 @@ public class FirestationUtilityTest {
     Person person3;
     Person person4;
     Address address;
+    LogCaptor logCaptor = LogCaptor.forClass(FirestationUtility.class);
 
     @BeforeEach
     public void init(){
@@ -35,7 +37,9 @@ public class FirestationUtilityTest {
 
         address.setPersons(Arrays.asList(person1, person2, person3, person4));
         Set<String> phones = FirestationUtility.getPhones(Arrays.asList(address));
-        Assertions.assertEquals(4, phones.size());
+        assertEquals(4, phones.size());
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Getting phone numbers from address"));
+
     }
 
     @Test
@@ -47,6 +51,7 @@ public class FirestationUtilityTest {
 
         address.setPersons(Arrays.asList(person1, person2, person3, person4));
         Set<String> phones = FirestationUtility.getPhones(Arrays.asList(address));
-        Assertions.assertEquals(1, phones.size());
+        assertEquals(1, phones.size());
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Getting phone numbers from address"));
     }
 }

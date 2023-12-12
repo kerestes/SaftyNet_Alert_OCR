@@ -10,7 +10,8 @@ import java.util.List;
 
 public class AddressUtility {
 
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(AddressUtility.class);
+
     public static Address changeBirthdayForAge(Address address){
         logger.debug("Converting date to age for address" + address.getAddress());
         address.getPersons().stream().forEach(person -> {
@@ -33,7 +34,7 @@ public class AddressUtility {
 
     public static List<Address> setMinorAndMajorList(List<Address> addresses){
         for(Address address: addresses){
-            logger.debug("Defining majors and minors based on the address" + address.getAddress());
+            logger.debug("Defining majors and minors based on the address " + address.getAddress());
             address.setMinor(new ArrayList<>());
             address.setMajor(new ArrayList<>());
             for(Person person: address.getPersons()){

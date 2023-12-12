@@ -10,7 +10,7 @@ import java.util.*;
 
 public class PersonUtility {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(PersonUtility.class);
 
     public static int getAge(Date birthday){
         logger.debug("Converting birthday(Date) into age(int)");

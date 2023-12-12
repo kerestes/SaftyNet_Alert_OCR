@@ -1,13 +1,17 @@
 package fr.saftynet.alerts.unitaire.SpringContext;
 
+import fr.saftynet.alerts.controllers.PersonController;
 import fr.saftynet.alerts.models.*;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.PatientMedicineService;
 import fr.saftynet.alerts.services.PersonService;
+import fr.saftynet.alerts.utilities.AddressUtility;
+import nl.altindag.log.LogCaptor;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,7 +33,6 @@ public class PersonControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @MockBean
     private PersonService personService;
     @MockBean
@@ -56,16 +59,18 @@ public class PersonControllerTest {
                         jsonPath("$[1].persons[0].allergies[0].name", is("nillacilan"))
 
                 );
+
     }
 
     @Test
-    public void getPersonInfoByLastNameNullTest() throws Exception {
+    public void getPersonInfoByLastNameNoAddressTest() throws Exception {
         when(addressService.getPersonByLastName(anyString())).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(get("/personInfo?lastName={lastName}", "jjj"))
+        mockMvc.perform(get("/personInfo?lastName={lastName}", "boyd"))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$").doesNotExist()
+                        jsonPath("$.Error", containsStringIgnoringCase("There is no person named boyd"))
+
                 );
 
     }
@@ -91,10 +96,10 @@ public class PersonControllerTest {
 
         when(addressService.getCity(anyString())).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/communityEmail?city={city}", "Culver"))
+        mockMvc.perform(get("/communityEmail"))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$").doesNotExist()
+                        jsonPath("$.Error", is("There is no city named null"))
                 );
     }
 
@@ -119,10 +124,25 @@ public class PersonControllerTest {
     public void getChildrenByAddressNullAddressTest() throws Exception{
         when(addressService.getAddressByName(anyString())).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/childAlert?address={address}", "xxx")).
+        mockMvc.perform(get("/childAlert")).
                 andExpectAll(
                         status().isOk(),
-                        jsonPath("$").doesNotExist()
+                        jsonPath("$.Error", is("The address null does not exists"))
+                );
+    }
+
+    @Test
+    public void getChildrenByAddressNoMinorTest() throws Exception{
+        Address address = makeUniqueAddress().get();
+        address = AddressUtility.setMinorAndMajorList(Arrays.asList(address)).get(0);
+        address.setMinor(null);
+        address.setPersons(new ArrayList<>());
+        when(addressService.getAddressByName(anyString())).thenReturn(Optional.of(address));
+
+        mockMvc.perform(get("/childAlert?address={address}", "Downing")).
+                andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", containsStringIgnoringCase("There is no minor in"))
                 );
     }
 
@@ -159,10 +179,34 @@ public class PersonControllerTest {
     }
 
     @Test
-    public void createNewPersonWithIdTest() throws Exception{
+    public void createNewPersonMissintAttributeTest() throws Exception{
 
         mockMvc.perform(post("/person").content("{" +
-                        " \"id\":1," +
+                        "    \"firstName\":\"Alexandre\"," +
+                        "    \"birthday\":\"1987-11-24\"," +
+                        "    \"phone\":\"1234567890\"," +
+                        "    \"email\":\"alexandrekerestes@exemplo.fr\"," +
+                        "    \"address\":{\"id\":1}," +
+                        "    \"allergies\":[" +
+                        "        {\"id\":4}" +
+                        "    ],\n" +
+                        "    \"medicines\":[" +
+                        "        {\"medicineId\":{\"id\":2}}," +
+                        "        {\"medicineId\":{\"id\":3}}" +
+                        "    ]" +
+                        "}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There is missing attribute, make sure you entered at least (firstName, lastName, phone, email, birthday and address{id})"))
+                );
+    }
+
+    @Test
+    public void createNewPersonInternalErrorTest() throws Exception{
+
+        when(personService.savePerson(any())).thenReturn(null);
+
+        mockMvc.perform(post("/person").content("{" +
                         "    \"firstName\":\"Alexandre\"," +
                         "    \"lastName\":\"Kerestes\"," +
                         "    \"birthday\":\"1987-11-24\"," +
@@ -179,25 +223,7 @@ public class PersonControllerTest {
                         "}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$").doesNotExist()
-                );
-    }
-
-    @Test
-    public void createNewPersonWithoutAllInfosTest() throws Exception{
-
-        when(personService.savePerson(any())).thenReturn(null);
-
-        mockMvc.perform(post("/person").content("{" +
-                        "    \"firstName\":\"Alexandre\"," +
-                        "    \"lastName\":\"Kerestes\"," +
-                        "    \"birthday\":\"1987-11-24\"," +
-                        "    \"phone\":\"1234567890\"," +
-                        "    \"email\":\"alexandrekerestes@exemplo.fr\"" +
-                        "}").contentType(MediaType.APPLICATION_JSON))
-                .andExpectAll(
-                        status().isOk(),
-                        jsonPath("$").doesNotExist()
+                        jsonPath("$.Error", is("There was an error to save de Person"))
                 );
     }
 
@@ -217,7 +243,28 @@ public class PersonControllerTest {
      }
 
     @Test
-    public void updatePersonNullIdTest() throws Exception{
+    public void updatePersonNoIdTest() throws Exception{
+
+        mockMvc.perform(put("/person").content("{}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("The Person's id must not be null"))
+                );
+    }
+
+    @Test
+    public void updatePersonNoPersonTest() throws Exception{
+        when(personService.getPerson(anyLong())).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/person").content("{\"id\":28, \"firstName\":\"Robert\"}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There is no person with this id"))
+                );
+    }
+
+    @Test
+    public void updatePersonIdTest() throws Exception{
         Person person = newPerson();
         person.setFirstName("Robert");
         when(personService.getPerson(anyLong())).thenReturn(Optional.of(newPerson()));
@@ -232,13 +279,32 @@ public class PersonControllerTest {
     }
 
     @Test
-    public void updatePersonIdTest() throws Exception{
+    public void updatePersonIdNoIdTest() throws Exception{
 
+        mockMvc.perform(put("/person/{id}", 0).content("{\"firstName\":\"Robert\"}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("The Person's id must not be null"))
+                );
+    }
 
+    @Test
+    public void updatePersonIdNoPersonTest() throws Exception{
+        when(personService.getPerson(anyLong())).thenReturn(Optional.empty());
 
         mockMvc.perform(put("/person/{id}", 28).content("{\"firstName\":\"Robert\"}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
-                        status().isOk()
+                        status().isOk(),
+                        jsonPath("$.Error", is("There is no person with this id"))
+                );
+    }
+
+    @Test
+    public void deletePersonTest() throws Exception {
+        mockMvc.perform(delete("/person/{id}", 0))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid ID"))
                 );
     }
 

@@ -3,8 +3,6 @@ package fr.saftynet.alerts.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
 import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.PatientMedicine;
 import fr.saftynet.alerts.models.Person;
@@ -13,12 +11,11 @@ import fr.saftynet.alerts.services.PatientMedicineService;
 import fr.saftynet.alerts.services.PersonService;
 import fr.saftynet.alerts.utilities.*;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +34,7 @@ public class PersonController {
 
     private ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(PersonController.class);
 
 
     @GetMapping("/personInfo")
@@ -104,7 +101,7 @@ public class PersonController {
 
     @PutMapping("/person")
     public JsonNode updatePerson(@RequestBody Person person, final HttpServletRequest request){
-        if(person.getId() != null){
+        if(person.getId() != null && person.getId() > 0){
             Optional<Person> optinalPerson = personService.getPerson(person.getId());
             if(optinalPerson.isPresent()) {
                 person = PersonUtility.createUpdate(person, optinalPerson.get());

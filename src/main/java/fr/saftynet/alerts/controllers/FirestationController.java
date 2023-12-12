@@ -30,7 +30,7 @@ public class FirestationController {
 
     ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(FirestationController.class);
 
     @GetMapping("/phoneAlert")
     public JsonNode getPhoneNumberPerFirestation(@Param("firestationId") final Long firestationId, final HttpServletRequest request){
@@ -42,13 +42,12 @@ public class FirestationController {
                 logger.info("(GET) /phoneAlert?firestationId=" + firestationId + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(returnHashMap);
             }
-
-        } else {
-            logger.error("(GET) /phoneAlert?firestationId=" + firestationId + " : requests error -> Firestation id must not be null; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Firestation id must not be null"));
+            logger.error("(GET) /phoneAlert?firestationId=" + firestationId + " : requests error -> Firestation does not exist; Made by (" + request.getRemoteAddr() + ")" );
+            return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exist"));
         }
-        logger.error("(GET) /phoneAlert?firestationId=" + firestationId + " : requests error -> Firestation does not exist; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exist"));
+        logger.error("(GET) /phoneAlert?firestationId=" + firestationId + " : requests error -> Firestation id must not be null; Made by (" + request.getRemoteAddr() + ")" );
+        return mapper.valueToTree(JsonResponse.errorResponse("Firestation id must not be null"));
+
     }
 
     @GetMapping("/firestation")
@@ -60,12 +59,11 @@ public class FirestationController {
                 logger.info("(GET) /firestation?stationNumber=" + stationNumber + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(AddressUtility.setMinorAndMajorList(addresses));
             }
-        } else {
-            logger.error("(GET) /phoneAlert?firestationId=" + stationNumber + " : requests error -> StationNumber must not be null; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("StationNumber must not be null"));
+            logger.error("(GET) /firestation?stationNumber=" + stationNumber + " : requests error -> Firestation does not exist; Made by (" + request.getRemoteAddr() + ")" );
+            return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exist"));
         }
-        logger.error("(GET) /firestation?stationNumber=" + stationNumber + " : requests error -> Firestation does not exist; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exist"));
+        logger.error("(GET) /phoneAlert?firestationId=" + stationNumber + " : requests error -> StationNumber must not be null; Made by (" + request.getRemoteAddr() + ")" );
+        return mapper.valueToTree(JsonResponse.errorResponse("StationNumber must not be null"));
     }
 
     @PostMapping("/firestation")
@@ -78,6 +76,8 @@ public class FirestationController {
                 logger.info("(POST) /firestation : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(saveFirestation);
             }
+            logger.info("(POST) /firestation : requests error -> There was an internal error; Made by (" + request.getRemoteAddr() + ")" );
+            return mapper.valueToTree(JsonResponse.errorResponse("There was an internal error"));
         }
         logger.error("(POST) /firestation : requests error -> Name field is missing in the request body; Made by (" + request.getRemoteAddr() + ")" );
         return mapper.valueToTree(JsonResponse.errorResponse("Name field is missing in the request body"));

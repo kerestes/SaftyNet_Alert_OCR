@@ -12,7 +12,7 @@
                 </pattern>>
             </patternlayout>
         </console>
-        <file name="File-Appender" filename="${log-path}/xmlfilelog.log">
+        <file name="File-Appender" filename="${log-path}/fileLog.log">
             <patternlayout>
                 <pattern>
                     [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n

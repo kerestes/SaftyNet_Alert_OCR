@@ -1,10 +1,12 @@
 package fr.saftynet.alerts.unitaire.SpringContext;
 
+import fr.saftynet.alerts.controllers.FirestationController;
 import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.Firestation;
 import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.FirestationService;
+import nl.altindag.log.LogCaptor;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,10 +32,8 @@ public class FirestationControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @MockBean
     FirestationService firestationService;
-
     @MockBean
     AddressService addressService;
 
@@ -51,6 +52,31 @@ public class FirestationControllerTest {
                         jsonPath("['Firestation 1']", CoreMatchers.hasItem("8418747462")),
                         jsonPath("['Firestation 1']", hasSize(5))
                 );
+
+    }
+
+    @Test
+    public void getPhoneAlertNotBodyRequestTest() throws Exception {
+
+        mockMvc.perform(get("/phoneAlert"))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Firestation id must not be null"))
+                );
+
+    }
+
+    @Test
+    public void getPhoneAlertInvalidIdTest() throws Exception {
+
+        when(firestationService.getFirestation(any())).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/phoneAlert?firestationId={id}", 1))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Firestation does not exist"))
+                );
+
     }
 
     @Test
@@ -68,6 +94,27 @@ public class FirestationControllerTest {
     }
 
     @Test
+    public void getFirestationNoStationNumberTest() throws Exception {
+
+        mockMvc.perform(get("/firestation"))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("StationNumber must not be null"))
+                );
+    }
+
+    @Test
+    public void getFirestationNoFirestationTest() throws Exception {
+        when(firestationService.getPersonsPerFirestation(anyLong())).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(get("/firestation?stationNumber={id}", 100))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Firestation does not exist"))
+                );
+    }
+
+    @Test
     public void createFirestationTest() throws Exception{
         Firestation firestation = new Firestation();
         firestation.setId(5L);
@@ -79,6 +126,27 @@ public class FirestationControllerTest {
                         status().isOk(),
                         jsonPath("$.name", is("New Firestation")),
                         jsonPath("$.id", is(5))
+                );
+    }
+
+    @Test
+    public void createFirestationNoNameTest() throws Exception{
+
+        mockMvc.perform(post("/firestation").content("{}").contentType((MediaType.APPLICATION_JSON)))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Name field is missing in the request body"))
+                );
+    }
+
+    @Test
+    public void createFirestationInternalErrorTest() throws Exception{
+        when(firestationService.saveFirestation(any())).thenReturn(null);
+
+        mockMvc.perform(post("/firestation").content("{\"name\": \"New Firestation\"}").contentType((MediaType.APPLICATION_JSON)))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There was an internal error"))
                 );
     }
 
@@ -102,13 +170,32 @@ public class FirestationControllerTest {
 
     @Test
     public void updateFirestationNoIdTest() throws Exception {
-        Optional<Firestation> optionalFirestation = Optional.empty();
-        when(firestationService.getFirestation(any())).thenReturn(optionalFirestation);
+
+        mockMvc.perform(put("/firestation").content("{}").contentType((MediaType.APPLICATION_JSON)))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Id field is missing in the request body"))
+                );
+    }
+
+    @Test
+    public void updateFirestationNoNameTest() throws Exception {
+
+        mockMvc.perform(put("/firestation").content("{\"id\":5}").contentType((MediaType.APPLICATION_JSON)))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Name field is missing in the request body"))
+                );
+    }
+
+    @Test
+    public void updateFirestationNoFirestationTest() throws Exception {
+        when(firestationService.getFirestation(any())).thenReturn(Optional.empty());
 
         mockMvc.perform(put("/firestation").content("{\"id\":5, \"name\": \"Changement de nom\"}").contentType((MediaType.APPLICATION_JSON)))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$").doesNotExist()
+                        jsonPath("$.Error", is("Firestation does not exists"))
                 );
     }
 
@@ -132,18 +219,32 @@ public class FirestationControllerTest {
 
     @Test
     public void updateFirestationIdNoIdTest() throws Exception{
-        Firestation firestation = new Firestation();
-        firestation.setId(2L);
-        firestation.setName("Changement de nom");
-        Optional<Firestation> optionalFirestation = Optional.of(firestation);
 
-        when(firestationService.saveFirestation(any())).thenReturn(firestation);
-        when(firestationService.getFirestation(any())).thenReturn(optionalFirestation);
-
-        mockMvc.perform(put("/firestation/{id}", 0).content("{\"id\":3, \"name\": \"Changement de nom\"}").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/firestation/{id}", 0).content("{}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$").doesNotExist()
+                        jsonPath("$.Error", is("Id field is missing in the request body"))
+                );
+    }
+
+    @Test
+    public void updateFirestationIdNoNameTest() throws Exception{
+
+        mockMvc.perform(put("/firestation/{id}", 3).content("{}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Name field is missing in the request body"))
+                );
+    }
+
+    @Test
+    public void updateFirestationIdNoFirestationTest() throws Exception{
+        when(firestationService.getFirestation(any())).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/firestation/{id}", 3).content("{\"name\": \"Changement de nom\"}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Firestation does not exists"))
                 );
     }
 
@@ -173,6 +274,65 @@ public class FirestationControllerTest {
                         jsonPath("$.id", is(2)),
                         jsonPath("$.address", is("29 15th St"))
 
+                );
+    }
+
+    @Test
+    public void addFirestationToAddressNoFirestationIdTest() throws Exception{
+
+        mockMvc.perform(put("/firestation/toaddress/{id}", 2).content("{}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("firestationId field is missing in the request body"))
+
+                );
+    }
+
+    @Test
+    public void addFirestationToAddressNoFirestationTest() throws Exception{
+
+        when(firestationService.getFirestation(any())).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/firestation/toaddress/{id}", 2).content("{\"firestationId\" : 4}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There is no firestaion with this id"))
+
+                );
+    }
+
+    @Test
+    public void addFirestationToAddressNoAddressTest() throws Exception{
+        Optional<Firestation> firestation = Optional.of(new Firestation());
+        firestation.get().setId(4L);
+        firestation.get().setName("Firestation 4");
+
+        when(firestationService.getFirestation(any())).thenReturn(firestation);
+        when(addressService.getAddress(2L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/firestation/toaddress/{id}", 2).content("{\"firestationId\" : 4}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There is no address with this id"))
+
+                );
+    }
+
+    @Test
+    public void deleteFirestationTest() throws Exception {
+        mockMvc.perform(delete("/firestation/{id}", 0))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid id"))
+                );
+    }
+
+    @Test
+    public void deleteMappingFirestationTest() throws Exception {
+        mockMvc.perform(delete("/firestation/toaddress/{id}", 0))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid id"))
                 );
     }
 

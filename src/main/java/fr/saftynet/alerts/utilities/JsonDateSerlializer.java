@@ -10,7 +10,7 @@ public class JsonDateSerlializer {
 
     private static ObjectMapper mapper;
 
-    private static Logger logger = LogManager.getLogger();
+    private static Logger logger = LogManager.getLogger(JsonDateSerlializer.class);
 
     public static ObjectMapper getInstance(){
         if (mapper == null){

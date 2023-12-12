@@ -1,10 +1,11 @@
-package fr.saftynet.alerts.unitaire;
+package fr.saftynet.alerts.unitaire.utilities;
 
 import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.Firestation;
 import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.utilities.AddressUtility;
-import org.junit.jupiter.api.Assertions;
+import nl.altindag.log.LogCaptor;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ public class AddressUtilityTest {
     Firestation firestation = new Firestation();;
     Person person1 = new Person();
     Person person2 = new Person();
-
+    LogCaptor logCaptor = LogCaptor.forClass(AddressUtility.class);
     @BeforeEach
     public void init(){
         Calendar calendar = Calendar.getInstance();
@@ -58,16 +59,20 @@ public class AddressUtilityTest {
         boolean resultAgeNotNull = address.getPersons().stream().allMatch(person -> person.getAge() != null);
         boolean resultBirthdayNull = address.getPersons().stream().allMatch(person -> person.getBirthday() == null);
 
-        Assertions.assertTrue(resultAgeNotNull);
-        Assertions.assertTrue(resultBirthdayNull);
+        assertTrue(resultAgeNotNull);
+        assertTrue(resultBirthdayNull);
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Converting date to age for address"));
+
     }
 
     @Test
     public void removeLastNameTest(){
         AddressUtility.removeLastName(Arrays.asList(address), "kerestes");
 
-        Assertions.assertTrue(!address.getPersons().contains(person2));
-        Assertions.assertTrue(address.getPersons().contains(person1));
+        assertTrue(!address.getPersons().contains(person2));
+        assertTrue(address.getPersons().contains(person1));
+
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Removing people who do not have the lastname"));
     }
 
 
@@ -75,8 +80,10 @@ public class AddressUtilityTest {
     public void setMinorAndMajorListTest(){
         AddressUtility.setMinorAndMajorList(Arrays.asList(address));
 
-        Assertions.assertTrue(address.getPersons() == null);
-        Assertions.assertTrue(address.getMinor().size() == 1);
-        Assertions.assertTrue(address.getMajor().size() == 1);
+        assertTrue(address.getPersons() == null);
+        assertTrue(address.getMinor().size() == 1);
+        assertTrue(address.getMajor().size() == 1);
+
+        assertTrue(logCaptor.getDebugLogs().get(0).contains("Defining majors and minors based on the address"));
     }
 }

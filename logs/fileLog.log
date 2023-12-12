@@ -1,0 +1,8 @@
+[INFO ] 2023-12-12 12:19:06.742 [main] AlertsApplication - Starting AlertsApplication using Java 21.0.1 with PID 51442 (/home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR/target/classes started by alexandrekerestes in /home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR)
+[DEBUG] 2023-12-12 12:19:06.746 [main] AlertsApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+[INFO ] 2023-12-12 12:19:06.747 [main] AlertsApplication - No active profile set, falling back to 1 default profile: "default"
+[DEBUG] 2023-12-12 12:19:08.554 [main] JsonDateSerlializer - Instantiating ObjectMapper with date serialization
+[DEBUG] 2023-12-12 12:19:08.554 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-12 12:19:08.934 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-12 12:19:08.983 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[INFO ] 2023-12-12 12:19:09.805 [main] AlertsApplication - Started AlertsApplication in 3.308 seconds (process running for 3.794)

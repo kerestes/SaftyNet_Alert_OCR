@@ -17,11 +17,4 @@ public class Firestation {
     private Long id;
 
     private String name;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Firestation firestation)) return false;
-        return Objects.equals(name, firestation.name);
-    }
 }

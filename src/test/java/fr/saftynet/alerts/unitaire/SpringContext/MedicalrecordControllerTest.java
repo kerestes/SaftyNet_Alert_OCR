@@ -54,6 +54,15 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
+    public void getPersonByAddressWithMedicalRecordsNoAddressTest() throws Exception {
+        mockMvc.perform(get("/fire"))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", containsStringIgnoringCase("There is no address named"))
+                );
+    }
+
+    @Test
     public void addMedicineTest() throws Exception {
         Optional<Medicine> medicine = Optional.of(new Medicine());
         medicine.get().setName("aznol");
@@ -78,15 +87,35 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addMedicineIdZeroTest() throws Exception {
+    public void addMedicineInvalidPersonIdTest() throws Exception {
 
-        when(medicineService.getMedicine(any())).thenReturn(Optional.empty());
-        when(personService.getPerson(any())).thenReturn(makePerson());
-
-        mockMvc.perform(put("/medicine/{personId}", 1).content("{\"quantity\": 2, \"medicineId\" : 0}").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/medicine/{personId}", 0).content("{\"quantity\": 2, \"medicineId\": 1}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$").doesNotExist()
+                        jsonPath("$.Error", is("Invalid Person id"))
+                );
+    }
+
+    @Test
+    public void addMedicineNoMedicineIdTest() throws Exception {
+
+        mockMvc.perform(put("/medicine/{personId}", 1).content("{\"quantity\": 2}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", containsStringIgnoringCase("Invalid Medicine id"))
+                );
+    }
+
+    @Test
+    public void addMedicineNoPersonOrMedicineTest() throws Exception {
+
+        when(medicineService.getMedicine(any())).thenReturn(Optional.empty());
+        when(personService.getPerson(any())).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/medicine/{personId}", 1).content("{\"quantity\": 2, \"medicineId\": 1}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Person (id=1) or Medicine (id=1) does not exist"))
                 );
     }
 
@@ -110,22 +139,75 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addAllergyAllergyEmptyTest() throws Exception{
-        Optional<Allergy> allergy = Optional.of(new Allergy());
-        allergy.get().setName("aznol");
+    public void addAllergyNoPersonIdTest() throws Exception{
 
-        Person person = makePerson().get();
+        mockMvc.perform(put("/allergy/{personId}", 0).content("{\"allergyId\" : 1}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid Person id"))
+                );
 
-        when(personService.getPerson(1L)).thenReturn(makePerson());
+    }
+
+    @Test
+    public void addAllergyNoAllergyIdTest() throws Exception{
+
+        mockMvc.perform(put("/allergy/{personId}", 1).content("{}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid Allergy id"))
+                );
+
+    }
+
+    @Test
+    public void addAllergyNoPersonOrAllergyTest() throws Exception{
+
+        when(personService.getPerson(1L)).thenReturn(Optional.empty());
         when(allergyService.getAllergy(1L)).thenReturn(Optional.empty());
-        when(personService.savePerson(any())).thenReturn(makePerson().get());
 
         mockMvc.perform(put("/allergy/{personId}", 1).content("{\"allergyId\" : 1}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$").doesNotExist()
+                        jsonPath("$.Error", is("Person (id=1) or Allergy (id=1) does not exist"))
                 );
 
+    }
+
+    @Test
+    public void deleteMedicineNoPersonIdTest() throws Exception {
+        mockMvc.perform(delete("/medicine/{personId}/{medicineId}", 0, 1))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid Person Id"))
+                );
+    }
+
+    @Test
+    public void deleteMedicineNoMedicineIdTest() throws Exception {
+        mockMvc.perform(delete("/medicine/{personId}/{medicineId}", 1, 0))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid Medicine Id"))
+                );
+    }
+
+    @Test
+    public void deleteAllergieNoPersonIdTest() throws Exception {
+        mockMvc.perform(delete("/allergy/{personId}/{medicineId}", 0, 1))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid Person Id"))
+                );
+    }
+
+    @Test
+    public void deleteAllergieNoMedicineIdTest() throws Exception {
+        mockMvc.perform(delete("/allergy/{personId}/{medicineId}", 1, 0))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("Invalid Allergy Id"))
+                );
     }
 
     private Optional<Address> makeAddress() {

@@ -23,11 +23,4 @@ public class Medicine {
     private String name;
 
     private int dosage_mg;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Medicine medicine)) return false;
-        return dosage_mg == medicine.dosage_mg && Objects.equals(name, medicine.name);
-    }
 }

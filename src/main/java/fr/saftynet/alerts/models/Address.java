@@ -38,11 +38,4 @@ public class Address {
 
     @Transient
     private List<Person> major = null;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Address address1)) return false;
-        return Objects.equals(address, address1.address) && Objects.equals(city, address1.city) && Objects.equals(zip, address1.zip);
-    }
 }
