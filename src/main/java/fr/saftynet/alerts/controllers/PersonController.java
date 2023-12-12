@@ -11,10 +11,7 @@ import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.PatientMedicineService;
 import fr.saftynet.alerts.services.PersonService;
-import fr.saftynet.alerts.utilities.AddressUtility;
-import fr.saftynet.alerts.utilities.JsonResponse;
-import fr.saftynet.alerts.utilities.MedicalRecordUtility;
-import fr.saftynet.alerts.utilities.PersonUtility;
+import fr.saftynet.alerts.utilities.*;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,15 +35,10 @@ public class PersonController {
     @Autowired
     private AddressService addressService;
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
     private static Logger logger = LogManager.getLogger();
 
-    @PostConstruct
-    private void setDateFormat(){
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
-    }
 
     @GetMapping("/personInfo")
     public JsonNode getPersonInfoByLastName(@Param("lastName") final String lastName, final HttpServletRequest request){

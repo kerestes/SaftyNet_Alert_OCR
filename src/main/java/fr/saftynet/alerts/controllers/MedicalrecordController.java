@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.saftynet.alerts.models.*;
 import fr.saftynet.alerts.services.*;
 import fr.saftynet.alerts.utilities.AddressUtility;
+import fr.saftynet.alerts.utilities.JsonDateSerlializer;
 import fr.saftynet.alerts.utilities.JsonResponse;
 import fr.saftynet.alerts.utilities.MedicalRecordUtility;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class MedicalrecordController {
     @Autowired
     private AddressService addressService;
 
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
     private static Logger logger = LogManager.getLogger();
 

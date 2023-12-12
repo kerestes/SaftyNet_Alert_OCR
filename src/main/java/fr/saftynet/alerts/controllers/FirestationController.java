@@ -8,6 +8,7 @@ import fr.saftynet.alerts.models.Firestation;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.FirestationService;
 import fr.saftynet.alerts.utilities.AddressUtility;
+import fr.saftynet.alerts.utilities.JsonDateSerlializer;
 import fr.saftynet.alerts.utilities.JsonResponse;
 import fr.saftynet.alerts.utilities.FirestationUtility;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class FirestationController {
     @Autowired
     private AddressService addressService;
 
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
     private static Logger logger = LogManager.getLogger();
 
@@ -88,6 +89,7 @@ public class FirestationController {
             if(firestation.has("name")){
                 Optional<Firestation> updateFirestation = firestationService.getFirestation(firestation.get("id").asLong());
                 if(updateFirestation.isPresent()) {
+                    updateFirestation.get().setName(firestation.get("name").asText());
                     Firestation savedFirestation = firestationService.saveFirestation(updateFirestation.get());
                     logger.info("(PUT) /firestation : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                     return mapper.valueToTree(savedFirestation);
@@ -126,7 +128,7 @@ public class FirestationController {
                 return mapper.valueToTree(JsonResponse.errorResponse("There is no address with this id"));
             }
             logger.error("(PUT) /firestation/toaddress/" + id + " : requests error -> There is no firestaion with this id : "+ firestationId +"; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There is no address with this id"));
+            return mapper.valueToTree(JsonResponse.errorResponse("There is no firestaion with this id"));
         }
         logger.error("(PUT) /firestation/toaddress/" + id + " : requests error -> firestationId field is missing in the request body; Made by (" + request.getRemoteAddr() + ")" );
         return mapper.valueToTree(JsonResponse.errorResponse("firestationId field is missing in the request body"));
