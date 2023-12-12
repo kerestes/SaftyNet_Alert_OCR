@@ -135,7 +135,21 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-Si le nom n'existe pas le système retourne vide
+Si le nom n'est pas informé ou il n'existe pas dans la base de données le système retourne un json avec l'erreur.
+
+```agsl
+    localhost:8080/personInfo
+```
+
+Réponse :
+
+Status: 200 OK
+
+```agsl
+    {
+        "Error": "There is no person named null"
+    }
+```
 
 ***
 
@@ -177,7 +191,21 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-Si le nom de la ville n'existe pas le système retourne vide.
+Si le nom de la ville n'existe pas le système retourne un json avec l'erreur.
+
+```agsl
+    localhost:8080/communityEmail?city=Culvsss
+```
+
+Réponse :
+
+Status: 200 OK
+
+```agsl
+    {
+        "Error": "There is no city named Culvsss"
+    }
+```
 
 ***
 
@@ -238,7 +266,39 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-S'il n'y a pas d'enfant sur l'adresse ou si l'adresse n'existe pas le système retourne vide.
+S'il n'y a pas d'enfant sur l'adresse le système retourne un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/childAlert?address=Manchester
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "There is no minor in 489 Manchester St"
+    }
+```
+
+***
+
+Si l'adresse n'existe pas le système retourne un json ave l'erreur.
+
+```agsl
+    http://localhost:8080/childAlert?address=aaa
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "The address aaa does not exists"
+    }
+```
 
 ***
 
@@ -271,18 +331,82 @@ Status: 200 OK
         "id": 24,
         "firstName": "Alexandre",
         "lastName": "KERESTES",
-        "birthday": "1987-11-24T00:00:00.000+00:00",
+        "birthday": 564710400000,
         "phone": "1234567890",
         "email": "alexandrekerestes@exemplo.fr",
         "allergies": [],
         "medicines": []
     }
 ```
+
 Il ne retourne pas les informations de l'adresse, mais en vrai, elles sont bien à jour dans le système.
+
+***
+
+Il est aussi possible d'informer une liste d'allergie et de medicines
+
+```agsl
+    {
+        "firstName":"Alexandre",
+        "lastName":"Kerestes",
+        "birthDay":"1987-11-24",
+        "phone":"1234567890",
+        "email":"alexandrekerestes@exemplo.fr",
+        "address":{"id":1},
+        "allergies":[
+            {"id":4}
+        ],
+        "medicines":[
+            {"medicineId":{"id":2}},
+            {"medicineId":{"id":3}}
+        ]
+    }
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "id": 28,
+        "firstName": "Alexandre",
+        "lastName": "KERESTES",
+        "birthday": "1987-11-24T00:00:00.000+00:00",
+        "phone": "1234567890",
+        "email": "alexandrekerestes@exemplo.fr",
+        "allergies": [
+            {
+                "id": 4,
+                "name": null
+            }
+        ],
+        "medicines": [
+            {
+                "quantity": 1,
+                "medicineId": {
+                    "id": 2,
+                    "name": null,
+                    "dosage_mg": 0
+                },
+                "personId": 28
+            },
+            {
+                "quantity": 1,
+                "medicineId": {
+                    "id": 3,
+                    "name": null,
+                    "dosage_mg": 0
+                },
+                "personId": 28
+            }
+        ]
+    }
+```
 
 ### <font color=red>Mauvaise requête </font>
 
-Si on fait une requête sans au moins un des attributs clés de l'objet, la requête va échouer et retourner vide.
+Si on fait une requête sans au moins un des attributs clés de l'objet, la requête va échouer et retourner un json avec l'erreur.
 
 ```agsl
     http://localhost:8080/person
@@ -302,33 +426,8 @@ Réponse :
 Status: 200 OK
 
 ```
-    RÉPONSE VIDE
-```
-***
-
-Si on fait une requête sans bien informer l'id de l'address le système nous retourne une erreur 500.
-
-```agsl
-    http://localhost:8080/person
-    
     {
-        "firstName":"Alexandre",
-        "lastName":"Kerestes",
-        "phone":"1234567890",
-        "email":"alexandrekerestes@exemplo.fr",
-        "address":{}
-    }
-```
-Réponse :
-
-Status: 500 Internal Server Error
-
-```
-    {
-        "timestamp": "2023-12-01T06:28:24.542+00:00",
-        "status": 500,
-        "error": "Internal Server Error",
-        "path": "/person"
+        "Error": "There is missing attribute, make sure you entered at least (firstName, lastName, phone, email, birthday and address{id})"
     }
 ```
 
@@ -392,7 +491,7 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-S'il n'y a pas d'id, il retourne une réponse vide.
+S'il n'y a pas d'id, il retourne un json avec l'erreur.
 
 ```agsl
     {
@@ -403,8 +502,32 @@ S'il n'y a pas d'id, il retourne une réponse vide.
 Réponse :
 
 Status: 200 OK
+
 ```
-    RÉPONSE VIDE
+    {
+        "Error": "The Person's id must not be null"
+    }
+```
+
+***
+
+S'il l'id n'existe pas, il retourne un json avec l'erreur.
+
+```agsl
+    {
+        "id":200,
+        "firstName":"Alexandre"
+    }   
+```
+
+Réponse :
+
+Status: 200 OK
+
+```
+    {
+        "Error": "There is no person with this id"
+    }
 ```
 
 ***
@@ -472,7 +595,7 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id n'existe pas, il retourne une réponse vide.
+Si l'id n'existe pas, il retourne un json avec l'erreur.
 
 ```agsl
     http://localhost:8080/person/200
@@ -485,8 +608,11 @@ Si l'id n'existe pas, il retourne une réponse vide.
 Réponse :
 
 Status: 200 OK
+
 ```
-    RÉPONSE VIDE
+    {
+        "Error": "There is no person with this id"
+    }
 ```
 
 ***
@@ -505,12 +631,32 @@ Réponse :
 
 Status: 200 OK
 ```
-    RÉPONSE VIDE
+    {
+        "Delete": "if id (1) exists, it was deleted"
+    }
 ```
+
+
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id n'existe pas, il retourne une réponse toujours vide.
+Si l'id n'existe pas, il retourne une réponse la même réponse.
+
+Mais si l'id est invalide il retourne un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/person/0
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Invalid ID"
+    }
+```
 
 ***
 
@@ -645,7 +791,21 @@ Réponse :
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'adresse n'existe pas il va retourne une réponse vide.
+Si l'adresse n'existe pas il va retourne un json avec l'erreur.
+
+```agsl
+    localhost:8080/fire?address=aaa
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "There is no address named aaa"
+    }
+```
 
 ***
 
@@ -709,7 +869,25 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id de l'allergie ou l'id de la personne n'est pas enregistrée dans la base des données la réponse sera vide.
+Si l'id de l'allergie ou l'id de la personne n'est pas enregistrée dans la base des données la réponse sera un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/allergy/100
+    
+    {
+        "allergyId":1
+    }
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Person (id=100) or Allergy (id=1) does not exist"
+    }
+```
 
 ***
 
@@ -781,7 +959,7 @@ Status: 200 OK
 
 ***
 
-Si on me la quantité on peut utiliser cette requête pour mettre à jour les données estoquées.
+Si on met la quantité dans la requête, on peut utiliser cette requête pour mettre à jour les données estoquées.
 
 ```agsl
     http://localhost:8080/medicine/1
@@ -844,7 +1022,26 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id du médicament ou l'id de la personne n'est pas enregistrée dans la base des données la réponse sera vide.
+Si l'id du médicament ou l'id de la personne n'est pas enregistrée dans la base des données la réponse sera un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/medicine/1
+    
+    {
+        "quantity":4,
+        "medicineId":200
+    }
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Person (id=1) or Medicine (id=200) does not exist"
+    }
+```
 
 ***
 
@@ -863,12 +1060,44 @@ Réponse :
 Status: 200 OK
 
 ```agsl
-     RÉPONSE VIDE
+    {
+        "Delete": "If the relationship between Person id (1) and Medicine id (2) exists, it was deleted"
+    }
 ```
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id du médicament ou de la personne n'existe pas le système retourne toujours vide.
+Si l'id du médicament ou de la personne est invalide le système retourne un json avec l'erreur.
+
+```agsl
+    localhost:8080/medicine/0/2
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Invalid Person Id"
+    }
+```
+
+***
+
+```agsl
+    localhost:8080/medicine/1/0
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Invalid Medicine Id"
+    }
+```
 
 ***
 
@@ -887,12 +1116,44 @@ Réponse :
 Status: 200 OK
 
 ```agsl
-    RÉPONSE VIDE
+    {
+        "Delete": "If the relationship between Person id (1) and Allergy id (2) exists, it was deleted"
+    }
 ```
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id de l'allergie ou de la personne n'existe pas le système retourne toujours vide.
+Si l'id de l'allergie ou de la personne est invalid le système retourne un json avec l'erreur.
+
+```agsl
+    localhost:8080/allergy/0/2
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Invalid Person Id"
+    }
+```
+
+***
+
+```agsl
+    localhost:8080/allergy/1/0
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Invalid Allergy Id"
+    }
+```
 
 ***
 
@@ -943,7 +1204,21 @@ RÉPONSE :
 
 ### <font color=green>Bonne requête </font>
 
-Si l'id n'existe pas la réponse sera vide.
+Si l'id n'existe pas la réponse sera un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/phoneAlert?firestationId=100
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Firestation does not exist"
+    }
+```
 
 ***
 
@@ -1077,7 +1352,21 @@ RÉPONSE :
 
 ### <font color=green>Bonne requête </font>
 
-Si l'id n'existe pas la réponse sera vide.
+Si l'id n'existe pas la réponse sera un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/firestation?stationNumber=100
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Firestation does not exist"
+    }
+```
 
 ***
 
@@ -1107,26 +1396,23 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-S'il les données nécessaires (name) ne sont pas là, le système retourne erreur 500.
+S'il les données nécessaires (name) ne sont pas là, le système retourne un json avec l'erreur.
 
 ```agsl
     http://localhost:8080/firestation
     
     {
-        "names":"Firestation 5"
+        "named":"Firestation 5"
     }
 ```
 
 RÉPONSE :
 
-500 Internal Server Error
+200 OK
 
 ```agsl
     {
-        "timestamp": "2023-12-07T02:59:32.555+00:00",
-        "status": 500,
-        "error": "Internal Server Error",
-        "path": "/firestation"
+        "Error": "Name field is missing in the request body"
     }
 ```
 
@@ -1139,7 +1425,7 @@ RÉPONSE :
 Il faut toujours informer l'id de la caserne.
 
 ```agsl
-    http://localhost:8080/firestation/
+    http://localhost:8080/firestation
 
     {
         "id":1,
@@ -1160,7 +1446,7 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-S'il n'y a pas d'id le système retourne vide.
+S'il n'y a pas d'id le système retourne un json avec l'erreur.
 
 ```agsl
     http://localhost:8080/firestation
@@ -1175,12 +1461,14 @@ Réponse :
 Status: 200 OK
 
 ```agsl
-    RÉPONSE VIDE
+    {
+        "Error": "Id field is missing in the request body"
+    }
 ```
 
 ***
 
-Si l'id n'existe pas le système retourne vide.
+Si l'id n'existe pas le système retourne un json avec l'erreur.
 
 ```agsl
     http://localhost:8080/firestation
@@ -1195,7 +1483,9 @@ Réponse :
 Status: 200 OK
 
 ```agsl
-    RÉPONSE VIDE
+    {
+        "Error": "Firestation does not exists"
+    }
 ```
 
 ***
@@ -1227,7 +1517,21 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id n'existe pas le système retourne vide.
+Si l'id n'existe pas le système retourne un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/firestation/10
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Firestation does not exists"
+    }
+```
 
 ***
 
@@ -1264,13 +1568,13 @@ Status: 200 OK
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id de la caserne ou l'id de l'address n'existe pas la réponse sera vide.
+Si l'id de la caserne ou l'id de l'address n'existe pas la réponse sera un json avec l'erreur.
 
 ```agsl
     http://localhost:8080/firestation/toaddress/200
 
     {
-        "fistationId":300
+        "firestationId":1
     }
 ```
 
@@ -1279,7 +1583,29 @@ Réponse :
 Status: 200 OK
 
 ```agsl
-    RÉPONSE VIDE
+    {
+        "Error": "There is no address with this id"
+    }
+```
+
+***
+
+```agsl
+    http://localhost:8080/firestation/toaddress/2
+
+    {
+        "firestationId":100
+    }
+```
+
+Réponse :
+
+Status: 200 OK
+
+```agsl
+    {
+        "Error": "There is no firestaion with this id"
+    }
 ```
 
 ***
@@ -1299,12 +1625,28 @@ Réponse :
 Status: 200 OK
 
 ```agsl
-    RÉPONSE VIDE
+    {
+        "Delete": "if id (4) exists, it was deleted"
+    }
 ```
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id n'existe pas le système retourne toujours vide.
+Si l'id est invalid le système retourne un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/firestation/0
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Invalid id"
+    }
+```
 
 ***
 
@@ -1323,9 +1665,25 @@ Réponse :
 Status: 200 OK
 
 ```agsl
-    RÉPONSE VIDE
+    {
+        "Delete": "if id (4) exists, it was deleted"
+    }
 ```
 
 ### <font color=red>Mauvaise requête </font>
 
-Si l'id n'existe pas le système retourne toujours vide.
+Si l'id est invalid le système retourne un json avec l'erreur.
+
+```agsl
+    http://localhost:8080/firestation/toaddress/0
+```
+
+RÉPONSE :
+
+200 OK
+
+```agsl
+    {
+        "Error": "Invalid id"
+    }
+```
