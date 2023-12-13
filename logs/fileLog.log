@@ -6,3 +6,52 @@
 [DEBUG] 2023-12-12 12:19:08.934 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
 [DEBUG] 2023-12-12 12:19:08.983 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
 [INFO ] 2023-12-12 12:19:09.805 [main] AlertsApplication - Started AlertsApplication in 3.308 seconds (process running for 3.794)
+[INFO ] 2023-12-12 19:58:53.206 [main] AlertsApplication - Starting AlertsApplication using Java 21.0.1 with PID 5408 (/home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR/target/classes started by alexandrekerestes in /home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR)
+[DEBUG] 2023-12-12 19:58:53.211 [main] AlertsApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+[INFO ] 2023-12-12 19:58:53.211 [main] AlertsApplication - No active profile set, falling back to 1 default profile: "default"
+[DEBUG] 2023-12-12 19:58:57.134 [main] JsonDateSerlializer - Instantiating ObjectMapper with date serialization
+[DEBUG] 2023-12-12 19:58:57.134 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-12 19:58:57.552 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-12 19:58:57.604 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[INFO ] 2023-12-12 20:01:30.856 [main] AlertsApplication - Starting AlertsApplication using Java 21.0.1 with PID 6080 (/home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR/target/classes started by alexandrekerestes in /home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR)
+[DEBUG] 2023-12-12 20:01:30.860 [main] AlertsApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+[INFO ] 2023-12-12 20:01:30.861 [main] AlertsApplication - No active profile set, falling back to 1 default profile: "default"
+[DEBUG] 2023-12-12 20:01:32.670 [main] JsonDateSerlializer - Instantiating ObjectMapper with date serialization
+[DEBUG] 2023-12-12 20:01:32.670 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-12 20:01:33.072 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-12 20:01:33.121 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[INFO ] 2023-12-12 20:01:33.959 [main] AlertsApplication - Started AlertsApplication in 3.355 seconds (process running for 3.818)
+[INFO ] 2023-12-12 20:02:31.906 [main] AlertsApplication - Starting AlertsApplication using Java 21.0.1 with PID 6632 (/home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR/target/classes started by alexandrekerestes in /home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR)
+[DEBUG] 2023-12-12 20:02:31.911 [main] AlertsApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+[INFO ] 2023-12-12 20:02:31.912 [main] AlertsApplication - No active profile set, falling back to 1 default profile: "default"
+[DEBUG] 2023-12-12 20:02:34.118 [main] JsonDateSerlializer - Instantiating ObjectMapper with date serialization
+[DEBUG] 2023-12-12 20:02:34.118 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-12 20:02:34.549 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-12 20:02:34.604 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[INFO ] 2023-12-12 20:02:35.910 [main] AlertsApplication - Started AlertsApplication in 4.273 seconds (process running for 4.713)
+[INFO ] 2023-12-12 20:07:35.111 [http-nio-8080-exec-2] PersonController - (GET) /personInfo?lastName=boyd : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[DEBUG] 2023-12-12 20:07:35.112 [http-nio-8080-exec-2] AddressUtility - Removing people who do not have the lastname boyd from the address 1509 Culver St
+[DEBUG] 2023-12-12 20:07:35.112 [http-nio-8080-exec-2] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-12 20:07:35.112 [http-nio-8080-exec-2] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-12 20:07:35.113 [http-nio-8080-exec-2] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-12 20:07:35.113 [http-nio-8080-exec-2] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-12 20:07:35.113 [http-nio-8080-exec-2] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-12 20:07:35.113 [http-nio-8080-exec-2] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-12 20:07:35.113 [http-nio-8080-exec-2] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-12 20:07:35.113 [http-nio-8080-exec-2] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-12 20:07:35.113 [http-nio-8080-exec-2] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-12 20:07:35.113 [http-nio-8080-exec-2] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-12 20:07:35.114 [http-nio-8080-exec-2] AddressUtility - Removing people who do not have the lastname boyd from the address 112 Steppes Pl
+[DEBUG] 2023-12-12 20:07:35.114 [http-nio-8080-exec-2] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-12 20:07:35.114 [http-nio-8080-exec-2] PersonUtility - Converting birthday(Date) into age(int)
+[ERROR] 2023-12-12 20:07:40.210 [http-nio-8080-exec-3] FirestationController - (DELETE) /firestation/0 : requests error -> Invalid id; Made by (0:0:0:0:0:0:0:1)
+[INFO ] 2023-12-12 20:07:42.693 [http-nio-8080-exec-4] FirestationController - (PUT) /firestation/toaddress/2, request body -> firestationId = 1 : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-12 20:07:45.476 [http-nio-8080-exec-5] FirestationController - (POST) /firestation : requests error -> Name field is missing in the request body; Made by (0:0:0:0:0:0:0:1)
+[INFO ] 2023-12-12 20:07:47.699 [http-nio-8080-exec-6] MedicalrecordController - (DELETE) /medicine/1/2 : request made successfully
+[DEBUG] 2023-12-12 20:07:50.239 [http-nio-8080-exec-7] MedicalRecordUtility - Creating a medical record to Alexandre KERESTES
+[INFO ] 2023-12-12 20:07:50.269 [http-nio-8080-exec-7] PersonController - (POST) /person : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-12 20:07:53.048 [http-nio-8080-exec-8] FirestationController - (PUT) /firestation : requests error -> Firestation does not exists; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-12 20:07:55.912 [http-nio-8080-exec-9] FirestationController - (PUT) /firestation : requests error -> Firestation does not exists; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-12 20:07:59.561 [http-nio-8080-exec-10] FirestationController - (PUT) /firestation/toaddress/1 : requests error -> There is no firestaion with this id : 1000; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-12 20:08:04.821 [http-nio-8080-exec-1] PersonController - (GET) /personInfo?lastName=null : requests error -> There is no person named null; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-12 20:08:10.538 [http-nio-8080-exec-2] PersonController - (GET) /personInfo?lastName=null : requests error -> There is no person named null; Made by (0:0:0:0:0:0:0:1)
