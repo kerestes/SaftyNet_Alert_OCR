@@ -1,6 +1,7 @@
 package fr.saftynet.alerts.integration;
 
 import fr.saftynet.alerts.models.Allergy;
+import fr.saftynet.alerts.models.Medicine;
 import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.services.AllergyService;
 import fr.saftynet.alerts.services.PersonService;
@@ -30,6 +31,15 @@ public class AllergyServiceIT {
     AllergyService allergyService;
     @Autowired
     PersonService personService;
+
+    @Test
+    public void saveAllergyIT(){
+        Allergy allergy = new Allergy();
+        allergy.setName("Test allergy");
+        Allergy savedAllergy = allergyService.saveAllergy(allergy);
+
+        assertEquals("Test allergy", savedAllergy.getName());
+    }
 
     @Test
     public void getAllergyIT(){

@@ -23,4 +23,15 @@ public class MedicineServiceIT {
         assertEquals("aznol", optionalMedicine.get().getName());
         assertEquals(60, optionalMedicine.get().getDosage_mg());
     }
+
+    @Test
+    public void saveMedicineIT(){
+        Medicine medicine = new Medicine();
+        medicine.setName("Test Medicine");
+        medicine.setDosage_mg(100);
+        Medicine savedMedicine = medicineService.saveMedicine(medicine);
+
+        assertEquals("Test Medicine", savedMedicine.getName());
+        assertEquals(100, savedMedicine.getDosage_mg());
+    }
 }

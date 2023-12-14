@@ -3,10 +3,8 @@ package fr.saftynet.alerts.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.PatientMedicine;
 import fr.saftynet.alerts.models.Person;
-import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.PatientMedicineService;
 import fr.saftynet.alerts.services.PersonService;
 import fr.saftynet.alerts.utilities.*;
@@ -17,7 +15,6 @@ import org.apache.logging.log4j.LogManager;
 
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -29,51 +26,13 @@ public class PersonController {
     private PersonService personService;
     @Autowired
     private PatientMedicineService patientMedicineService;
-    @Autowired
-    private AddressService addressService;
 
     private ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
     private static final Logger logger = LogManager.getLogger(PersonController.class);
 
 
-    @GetMapping("/personInfo")
-    public JsonNode getPersonInfoByLastName(@Param("lastName") final String lastName, final HttpServletRequest request){
-        List<Address> addresses = addressService.getPersonByLastName(lastName);
-        if (!addresses.isEmpty()){
-            logger.info("(GET) /personInfo?lastName=" + lastName + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(AddressUtility.removeLastName(addresses, lastName));
-        }
-        logger.error("(GET) /personInfo?lastName=" + lastName + " : requests error -> There is no person named " + lastName + "; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is no person named " + lastName));
-    }
 
-    @GetMapping("/communityEmail")
-    public JsonNode getEmailPerCity(@Param("city") final String city, final HttpServletRequest request){
-        Optional<String> cityName = addressService.getCity(city);
-        if(cityName.isPresent()){
-            logger.info("(GET) /communityEmail?city=" + city + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(cityName.map(s -> Map.of("Emails from " + s, personService.getEmailPerCity(s))).orElse(null));
-        }
-        logger.error("(GET) /communityEmail?city=" + city + " : requests error -> There is no city named " + city + "; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is no city named " + city));
-    }
-
-    @GetMapping("/childAlert")
-    public JsonNode getChildrenByAddress(@Param("address") final String address, final HttpServletRequest request){
-        Optional<Address> optionalAddress = addressService.getAddressByName(address);
-        if (optionalAddress.isPresent()){
-            Address preparedAddress = AddressUtility.setMinorAndMajorList(Arrays.asList(optionalAddress.get())).get(0);
-            if(!preparedAddress.getMinor().isEmpty()){
-                logger.info("(GET) /childAlert?address=" + address + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
-                return mapper.valueToTree(preparedAddress);
-            }
-            logger.error("(GET) /childAlert?address=" + address + " : requests error -> There is no minor in " + preparedAddress.getAddress() + "; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There is no minor in " + preparedAddress.getAddress()));
-        }
-        logger.error("(GET) /childAlert?address=" + address + " : requests error -> The address " + address + " does not exists; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("The address " + address + " does not exists"));
-    }
 
     @PostMapping("/person")
     public JsonNode createNewPerson(@RequestBody Person person, final HttpServletRequest request){

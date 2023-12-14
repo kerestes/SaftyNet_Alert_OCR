@@ -55,3 +55,73 @@
 [ERROR] 2023-12-12 20:07:59.561 [http-nio-8080-exec-10] FirestationController - (PUT) /firestation/toaddress/1 : requests error -> There is no firestaion with this id : 1000; Made by (0:0:0:0:0:0:0:1)
 [ERROR] 2023-12-12 20:08:04.821 [http-nio-8080-exec-1] PersonController - (GET) /personInfo?lastName=null : requests error -> There is no person named null; Made by (0:0:0:0:0:0:0:1)
 [ERROR] 2023-12-12 20:08:10.538 [http-nio-8080-exec-2] PersonController - (GET) /personInfo?lastName=null : requests error -> There is no person named null; Made by (0:0:0:0:0:0:0:1)
+[INFO ] 2023-12-13 12:57:37.138 [main] AlertsApplication - Starting AlertsApplication using Java 21.0.1 with PID 23656 (/home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR/target/classes started by alexandrekerestes in /home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR)
+[DEBUG] 2023-12-13 12:57:37.142 [main] AlertsApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+[INFO ] 2023-12-13 12:57:37.142 [main] AlertsApplication - No active profile set, falling back to 1 default profile: "default"
+[DEBUG] 2023-12-13 12:57:39.763 [main] JsonDateSerlializer - Instantiating ObjectMapper with date serialization
+[DEBUG] 2023-12-13 12:57:39.763 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 12:57:40.223 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 12:57:40.286 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 12:57:40.288 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[INFO ] 2023-12-13 12:57:44.525 [main] AlertsApplication - Started AlertsApplication in 7.731 seconds (process running for 8.356)
+[INFO ] 2023-12-13 12:57:59.267 [http-nio-8080-exec-1] SaftyAlertController - (GET) /firestation?stationNumber=1 : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[DEBUG] 2023-12-13 12:57:59.267 [http-nio-8080-exec-1] AddressUtility - Defining majors and minors based on the address 951 LoneTree Rd
+[DEBUG] 2023-12-13 12:57:59.268 [http-nio-8080-exec-1] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-13 12:57:59.268 [http-nio-8080-exec-1] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-13 12:57:59.269 [http-nio-8080-exec-1] MedicalRecordUtility - Setting allergies and medicines to null
+[DEBUG] 2023-12-13 12:57:59.269 [http-nio-8080-exec-1] AddressUtility - Defining majors and minors based on the address 947 E. Rose Dr
+[DEBUG] 2023-12-13 12:57:59.269 [http-nio-8080-exec-1] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-13 12:57:59.269 [http-nio-8080-exec-1] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-13 12:57:59.269 [http-nio-8080-exec-1] MedicalRecordUtility - Setting allergies and medicines to null
+[DEBUG] 2023-12-13 12:57:59.269 [http-nio-8080-exec-1] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-13 12:57:59.269 [http-nio-8080-exec-1] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-13 12:57:59.269 [http-nio-8080-exec-1] MedicalRecordUtility - Setting allergies and medicines to null
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] MedicalRecordUtility - Setting allergies and medicines to null
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] AddressUtility - Defining majors and minors based on the address 908 73rd St
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] MedicalRecordUtility - Setting allergies and medicines to null
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] MedicalRecordUtility - Setting allergies and medicines to null
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] AddressUtility - Defining majors and minors based on the address 644 Gershwin Cir
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] PersonUtility - Setting null birthday(Date) and converting into age(int)
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] PersonUtility - Converting birthday(Date) into age(int)
+[DEBUG] 2023-12-13 12:57:59.270 [http-nio-8080-exec-1] MedicalRecordUtility - Setting allergies and medicines to null
+[INFO ] 2023-12-13 13:11:06.116 [main] AlertsApplication - Starting AlertsApplication using Java 21.0.1 with PID 25455 (/home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR/target/classes started by alexandrekerestes in /home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR)
+[DEBUG] 2023-12-13 13:11:06.120 [main] AlertsApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+[INFO ] 2023-12-13 13:11:06.121 [main] AlertsApplication - No active profile set, falling back to 1 default profile: "default"
+[DEBUG] 2023-12-13 13:11:08.509 [main] JsonDateSerlializer - Instantiating ObjectMapper with date serialization
+[DEBUG] 2023-12-13 13:11:08.509 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 13:11:08.952 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 13:11:09.026 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 13:11:09.029 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[INFO ] 2023-12-13 13:11:10.322 [main] AlertsApplication - Started AlertsApplication in 4.478 seconds (process running for 4.946)
+[INFO ] 2023-12-13 13:11:35.986 [http-nio-8080-exec-2] MedicalrecordController - (POST) /addAllergy : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[INFO ] 2023-12-13 13:12:27.829 [http-nio-8080-exec-3] MedicalrecordController - (POST) /addMedicine : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[INFO ] 2023-12-13 13:18:29.619 [main] AlertsApplication - Starting AlertsApplication using Java 21.0.1 with PID 26806 (/home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR/target/classes started by alexandrekerestes in /home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR)
+[DEBUG] 2023-12-13 13:18:29.623 [main] AlertsApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+[INFO ] 2023-12-13 13:18:29.624 [main] AlertsApplication - No active profile set, falling back to 1 default profile: "default"
+[DEBUG] 2023-12-13 13:18:31.933 [main] JsonDateSerlializer - Instantiating ObjectMapper with date serialization
+[DEBUG] 2023-12-13 13:18:31.933 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 13:18:32.384 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 13:18:32.450 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-13 13:18:32.452 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[INFO ] 2023-12-13 13:18:33.729 [main] AlertsApplication - Started AlertsApplication in 4.361 seconds (process running for 4.809)
+[INFO ] 2023-12-13 13:18:37.765 [http-nio-8080-exec-2] MedicalrecordController - (POST) /addMedicine : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-13 13:18:43.543 [http-nio-8080-exec-3] MedicalrecordController - (POST) /addMedicine : requests error -> There is no name or dosage_mg in the request body; Made by (0:0:0:0:0:0:0:1)
+[INFO ] 2023-12-14 08:54:17.242 [main] AlertsApplication - Starting AlertsApplication using Java 21.0.1 with PID 7362 (/home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR/target/classes started by alexandrekerestes in /home/alexandrekerestes/Documents/mission_5/p5/SaftyNet_Alert_OCR)
+[DEBUG] 2023-12-14 08:54:17.246 [main] AlertsApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+[INFO ] 2023-12-14 08:54:17.247 [main] AlertsApplication - No active profile set, falling back to 1 default profile: "default"
+[DEBUG] 2023-12-14 08:54:19.534 [main] JsonDateSerlializer - Instantiating ObjectMapper with date serialization
+[DEBUG] 2023-12-14 08:54:19.534 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-14 08:54:20.021 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-14 08:54:20.023 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[DEBUG] 2023-12-14 08:54:20.059 [main] JsonDateSerlializer - Getting ObjectMapper with date serialization
+[INFO ] 2023-12-14 08:54:21.458 [main] AlertsApplication - Started AlertsApplication in 4.507 seconds (process running for 4.959)
+[INFO ] 2023-12-14 08:54:43.412 [http-nio-8080-exec-1] MedicalrecordController - (POST) /addMedicine : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-14 08:56:23.591 [http-nio-8080-exec-5] MedicalrecordController - (POST) /addMedicine : requests error -> There is no name or dosage_mg in the request body; Made by (0:0:0:0:0:0:0:1)
+[INFO ] 2023-12-14 08:58:58.324 [http-nio-8080-exec-9] MedicalrecordController - (POST) /addAllergy : request made successfully; Made by (0:0:0:0:0:0:0:1)
+[ERROR] 2023-12-14 08:59:14.559 [http-nio-8080-exec-10] MedicalrecordController - (POST) /addAllergy : requests error -> There is no name in the request body; Made by (0:0:0:0:0:0:0:1)

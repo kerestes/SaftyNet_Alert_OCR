@@ -2,14 +2,11 @@ package fr.saftynet.alerts.services;
 
 import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.Firestation;
-import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.repositories.AddressRepository;
 import fr.saftynet.alerts.repositories.FirestationRepository;
-import fr.saftynet.alerts.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 

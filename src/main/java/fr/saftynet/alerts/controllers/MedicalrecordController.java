@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.saftynet.alerts.models.*;
 import fr.saftynet.alerts.services.*;
-import fr.saftynet.alerts.utilities.AddressUtility;
 import fr.saftynet.alerts.utilities.JsonDateSerlializer;
 import fr.saftynet.alerts.utilities.JsonResponse;
 import fr.saftynet.alerts.utilities.MedicalRecordUtility;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -31,26 +29,47 @@ public class MedicalrecordController {
     @Autowired
     private AllergyService allergyService;
 
-    @Autowired
-    private AddressService addressService;
-
     ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
     private static final Logger logger = LogManager.getLogger(MedicalrecordController.class);
 
-    @GetMapping("/fire")
-    public JsonNode getPersonByAddressWithMedicalRecords(@Param("address") final String address, HttpServletRequest request){
-        Optional<Address> optionalAddress = addressService.getAddressByName(address);
-        if(optionalAddress.isPresent()){
-            logger.info("(GET) /fire?address=" + address + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(AddressUtility.changeBirthdayForAge(optionalAddress.get()));
+    @PostMapping("/addMedicine")
+    public JsonNode addMedicine(@RequestBody final ObjectNode medicineRequest, final HttpServletRequest request){
+        if(medicineRequest.has("name") && medicineRequest.has("dosage_mg")){
+            Medicine medicine = new Medicine();
+            medicine.setDosage_mg(medicineRequest.get("dosage_mg").asInt());
+            medicine.setName(medicineRequest.get("name").asText());
+            Optional<Medicine> optionalMedicine = Optional.ofNullable(medicineService.saveMedicine(medicine));
+            if(optionalMedicine.isPresent()){
+                logger.info("(POST) /addMedicine : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
+                return mapper.valueToTree(optionalMedicine.get());
+            }
+            logger.error("(POST) /addMedicine : requests error -> There was an error to save medicine; Made by (" + request.getRemoteAddr() + ")" );
+            return mapper.valueToTree(JsonResponse.errorResponse("There was an error to save medicine"));
         }
-        logger.error("(GET) /fire?address=" + address + " : requests error -> There is no address named " + address + "; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is no address named " + address));
+        logger.error("(POST) /addMedicine : requests error -> There is no name or dosage_mg in the request body; Made by (" + request.getRemoteAddr() + ")" );
+        return mapper.valueToTree(JsonResponse.errorResponse("There is no name or dosage_mg in the request body"));
+    }
+
+    @PostMapping("/addAllergy")
+    public JsonNode addAllergy(@RequestBody final ObjectNode medicineRequest, final HttpServletRequest request){
+        if(medicineRequest.has("name")){
+            Allergy allergy = new Allergy();
+            allergy.setName(medicineRequest.get("name").asText());
+            Optional<Allergy> optionalAllergy = Optional.ofNullable(allergyService.saveAllergy(allergy));
+            if(optionalAllergy.isPresent()){
+                logger.info("(POST) /addAllergy : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
+                return mapper.valueToTree(optionalAllergy.get());
+            }
+            logger.error("(POST) /addAllergy : requests error -> There was an error to save allergy; Made by (" + request.getRemoteAddr() + ")" );
+            return mapper.valueToTree(JsonResponse.errorResponse("There was an error to save medicine"));
+        }
+        logger.error("(POST) /addAllergy : requests error -> There is no name in the request body; Made by (" + request.getRemoteAddr() + ")" );
+        return mapper.valueToTree(JsonResponse.errorResponse("There is no name in the request body"));
     }
 
     @PutMapping("/medicine/{personId}")
-    public JsonNode addMedicine(@PathVariable final Long personId, @RequestBody final ObjectNode medicineRequest, final HttpServletRequest request){
+    public JsonNode addMedicineToPerson(@PathVariable final Long personId, @RequestBody final ObjectNode medicineRequest, final HttpServletRequest request){
         if(personId != null && personId > 0){
             int quantity = MedicalRecordUtility.setQuantity(medicineRequest);
             if(medicineRequest.has("medicineId")){
@@ -63,18 +82,18 @@ public class MedicalrecordController {
                     logger.info("(PUT) /medicine/" + personId + ", request body -> medicineId = " + realMedicineId + ", quantity = " + quantity + ": request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                     return mapper.valueToTree(personService.getPerson(personId).get());
                 }
-                logger.error("(GET) /medicine/" + personId + " : requests error -> Person (id=" + personId +") or Medicine (id=" + realMedicineId + ") does not exist; Made by (" + request.getRemoteAddr() + ")" );
+                logger.error("(PUT) /medicine/" + personId + " : requests error -> Person (id=" + personId +") or Medicine (id=" + realMedicineId + ") does not exist; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(JsonResponse.errorResponse("Person (id=" + personId +") or Medicine (id=" + realMedicineId + ") does not exist"));
             }
-            logger.error("(GET) /medicine/" + personId + " : requests error -> Invalid Medicine id; Made by (" + request.getRemoteAddr() + ")" );
+            logger.error("(PUT) /medicine/" + personId + " : requests error -> Invalid Medicine id; Made by (" + request.getRemoteAddr() + ")" );
             return mapper.valueToTree(JsonResponse.errorResponse("Invalid Medicine id"));
         }
-        logger.error("(GET) /medicine/" + personId + " : requests error -> Invalid Person id; Made by (" + request.getRemoteAddr() + ")" );
+        logger.error("(PUT) /medicine/" + personId + " : requests error -> Invalid Person id; Made by (" + request.getRemoteAddr() + ")" );
         return mapper.valueToTree(JsonResponse.errorResponse("Invalid Person id"));
     }
 
     @PutMapping("/allergy/{personId}")
-    public JsonNode addAllergy(@PathVariable final Long personId, @RequestBody final ObjectNode allergyRequest, final HttpServletRequest request){
+    public JsonNode addAllergyToPerson(@PathVariable final Long personId, @RequestBody final ObjectNode allergyRequest, final HttpServletRequest request){
         if(personId != null && personId > 0){
             if(allergyRequest.has("allergyId")){
                 Long allergyId = allergyRequest.get("allergyId").asLong();
@@ -95,7 +114,7 @@ public class MedicalrecordController {
     }
 
     @DeleteMapping("/medicine/{personId}/{medicineId}")
-    public JsonNode deleteMedicine(@PathVariable final Long personId, @PathVariable final Long medicineId, final HttpServletRequest request){
+    public JsonNode deleteMedicineFromPerson(@PathVariable final Long personId, @PathVariable final Long medicineId, final HttpServletRequest request){
         if(personId != null && personId > 0){
             if(medicineId != null && medicineId > 0){
                 patientMedicineService.deletePatientMedicine(personId, medicineId);
@@ -112,7 +131,7 @@ public class MedicalrecordController {
     }
 
     @DeleteMapping("/allergy/{personId}/{allergyId}")
-    public JsonNode deleteAllergie(@PathVariable final Long personId, @PathVariable final Long allergyId, final HttpServletRequest request){
+    public JsonNode deleteAllergieFromPerson(@PathVariable final Long personId, @PathVariable final Long allergyId, final HttpServletRequest request){
         if(personId != null && personId > 0){
             if(allergyId != null && allergyId > 0){
                 allergyService.deleteAllergy(personId, allergyId);

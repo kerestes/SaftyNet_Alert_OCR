@@ -14,4 +14,6 @@ public class MedicineService {
     private MedicineRepository medicineRepository;
 
     public Optional<Medicine> getMedicine(final Long id){return medicineRepository.findById(id);}
+
+    public Medicine saveMedicine(Medicine medicine){return medicineRepository.save(medicine);}
 }

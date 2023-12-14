@@ -7,15 +7,12 @@ import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.Firestation;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.FirestationService;
-import fr.saftynet.alerts.utilities.AddressUtility;
 import fr.saftynet.alerts.utilities.JsonDateSerlializer;
 import fr.saftynet.alerts.utilities.JsonResponse;
-import fr.saftynet.alerts.utilities.FirestationUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -31,40 +28,6 @@ public class FirestationController {
     ObjectMapper mapper = JsonDateSerlializer.getInstance();
 
     private static final Logger logger = LogManager.getLogger(FirestationController.class);
-
-    @GetMapping("/phoneAlert")
-    public JsonNode getPhoneNumberPerFirestation(@Param("firestationId") final Long firestationId, final HttpServletRequest request){
-        if(firestationId != null){
-            Optional<Firestation> realFirestation = firestationService.getFirestation(firestationId);
-            if(realFirestation.isPresent()){
-                HashMap<String, Set<String>> returnHashMap = new HashMap<>();
-                returnHashMap.put(realFirestation.get().getName(),  FirestationUtility.getPhones(firestationService.getPersonsPerFirestation(firestationId)));
-                logger.info("(GET) /phoneAlert?firestationId=" + firestationId + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
-                return mapper.valueToTree(returnHashMap);
-            }
-            logger.error("(GET) /phoneAlert?firestationId=" + firestationId + " : requests error -> Firestation does not exist; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exist"));
-        }
-        logger.error("(GET) /phoneAlert?firestationId=" + firestationId + " : requests error -> Firestation id must not be null; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Firestation id must not be null"));
-
-    }
-
-    @GetMapping("/firestation")
-    public JsonNode getListPerson(@Param("stationNumber") final Long stationNumber, final HttpServletRequest request){
-        if(stationNumber != null){
-        ObjectMapper mapper = new ObjectMapper();
-            List<Address> addresses = firestationService.getPersonsPerFirestation(stationNumber);
-            if(!addresses.isEmpty()){
-                logger.info("(GET) /firestation?stationNumber=" + stationNumber + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
-                return mapper.valueToTree(AddressUtility.setMinorAndMajorList(addresses));
-            }
-            logger.error("(GET) /firestation?stationNumber=" + stationNumber + " : requests error -> Firestation does not exist; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exist"));
-        }
-        logger.error("(GET) /phoneAlert?firestationId=" + stationNumber + " : requests error -> StationNumber must not be null; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("StationNumber must not be null"));
-    }
 
     @PostMapping("/firestation")
     public JsonNode createFirestation(@RequestBody final ObjectNode firestation, final HttpServletRequest request){

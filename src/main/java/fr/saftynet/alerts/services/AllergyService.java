@@ -16,4 +16,6 @@ public class AllergyService {
     public Optional<Allergy> getAllergy(final Long id){ return allergyRepository.findById(id);}
 
     public void deleteAllergy(final Long personId, final Long allergyId){allergyRepository.deleteAllergy(personId, allergyId);}
+
+    public Allergy saveAllergy(Allergy allergy){return allergyRepository.save(allergy);}
 }

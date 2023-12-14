@@ -27,7 +27,6 @@ public class MedicalrecordControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @MockBean
     PersonService personService;
     @MockBean
@@ -36,34 +35,81 @@ public class MedicalrecordControllerTest {
     MedicineService medicineService;
     @MockBean
     AllergyService allergyService;
-    @MockBean
-    AddressService addressService;
-
-    @Test
-    public void getPersonByAddressWithMedicalRecordsTest() throws Exception {
-        when(addressService.getAddressByName(any())).thenReturn(makeAddress());
-        mockMvc.perform(get("/fire?address={address}", "112 Steppes"))
-                .andExpectAll(
-                        status().isOk(),
-                        jsonPath("$.address", is("112 Steppes Pl")),
-                        jsonPath("$.firestation.name", is("Firestation 4")),
-                        jsonPath("$.persons", hasSize(3)),
-                        jsonPath("$.persons.[0].lastName", containsStringIgnoringCase("Cooper")),
-                        jsonPath("$.persons.[2].allergies.[0].name", is("nillacilan"))
-                );
-    }
-
-    @Test
-    public void getPersonByAddressWithMedicalRecordsNoAddressTest() throws Exception {
-        mockMvc.perform(get("/fire"))
-                .andExpectAll(
-                        status().isOk(),
-                        jsonPath("$.Error", containsStringIgnoringCase("There is no address named"))
-                );
-    }
 
     @Test
     public void addMedicineTest() throws Exception {
+        Medicine medicine = new Medicine();
+        medicine.setId(10L);
+        medicine.setName("test name");
+        medicine.setDosage_mg(100);
+        when(medicineService.saveMedicine(any())).thenReturn(medicine);
+
+        mockMvc.perform(post("/addMedicine").content("{\"name\":\"test name\", \"dosage_mg\":100}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.name", is("test name")),
+                        jsonPath("$.dosage_mg", is(100))
+                );
+    }
+
+    @Test
+    public void addMedicineErrorSavingTest() throws Exception {
+        when(medicineService.saveMedicine(any())).thenReturn(null);
+
+        mockMvc.perform(post("/addMedicine").content("{\"name\":\"test name\", \"dosage_mg\":100}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There was an error to save medicine"))
+                );
+    }
+
+    @Test
+    public void addMedicineNoNameRequestTest() throws Exception {
+
+        mockMvc.perform(post("/addMedicine").content("{ \"dosage_mg\":100}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There is no name or dosage_mg in the request body"))
+                );
+    }
+
+    @Test
+    public void addAllergyTest() throws Exception {
+        Allergy allergy = new Allergy();
+        allergy.setId(10L);
+        allergy.setName("Allergy test");
+        when(allergyService.saveAllergy(any())).thenReturn(allergy);
+
+        mockMvc.perform(post("/addAllergy").content("{\"name\":\"Allergy test\"}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.name", is("Allergy test"))
+                );
+    }
+
+    @Test
+    public void addAllergyErrorSavingTest() throws Exception {
+        when(allergyService.saveAllergy(any())).thenReturn(null);
+
+        mockMvc.perform(post("/addAllergy").content("{\"name\":\"Allergy test\"}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There was an error to save medicine"))
+                );
+    }
+
+    @Test
+    public void addAllergyNoNameTest() throws Exception {
+
+        mockMvc.perform(post("/addAllergy").content("{}").contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.Error", is("There is no name in the request body"))
+                );
+    }
+
+    @Test
+    public void addMedicineToPersonTest() throws Exception {
         Optional<Medicine> medicine = Optional.of(new Medicine());
         medicine.get().setName("aznol");
         medicine.get().setId(1L);
@@ -87,7 +133,7 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addMedicineInvalidPersonIdTest() throws Exception {
+    public void addMedicineToPersonInvalidPersonIdTest() throws Exception {
 
         mockMvc.perform(put("/medicine/{personId}", 0).content("{\"quantity\": 2, \"medicineId\": 1}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
@@ -97,7 +143,7 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addMedicineNoMedicineIdTest() throws Exception {
+    public void addMedicineToPersonNoMedicineIdTest() throws Exception {
 
         mockMvc.perform(put("/medicine/{personId}", 1).content("{\"quantity\": 2}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
@@ -107,7 +153,7 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addMedicineNoPersonOrMedicineTest() throws Exception {
+    public void addMedicineToPersonNoPersonOrMedicineTest() throws Exception {
 
         when(medicineService.getMedicine(any())).thenReturn(Optional.empty());
         when(personService.getPerson(any())).thenReturn(Optional.empty());
@@ -120,7 +166,7 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addAllergyTest() throws Exception{
+    public void addAllergyToPersonTest() throws Exception{
         Allergy allergy = new Allergy();
         allergy.setName("aznol");
         allergy.setId(1L);
@@ -139,7 +185,7 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addAllergyNoPersonIdTest() throws Exception{
+    public void addAllergyToPersonNoPersonIdTest() throws Exception{
 
         mockMvc.perform(put("/allergy/{personId}", 0).content("{\"allergyId\" : 1}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
@@ -150,7 +196,7 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addAllergyNoAllergyIdTest() throws Exception{
+    public void addAllergyToPersonNoAllergyIdTest() throws Exception{
 
         mockMvc.perform(put("/allergy/{personId}", 1).content("{}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
@@ -161,7 +207,7 @@ public class MedicalrecordControllerTest {
     }
 
     @Test
-    public void addAllergyNoPersonOrAllergyTest() throws Exception{
+    public void addAllergyToPersonNoPersonOrAllergyTest() throws Exception{
 
         when(personService.getPerson(1L)).thenReturn(Optional.empty());
         when(allergyService.getAllergy(1L)).thenReturn(Optional.empty());
@@ -208,89 +254,6 @@ public class MedicalrecordControllerTest {
                         status().isOk(),
                         jsonPath("$.Error", is("Invalid Allergy Id"))
                 );
-    }
-
-    private Optional<Address> makeAddress() {
-        Optional<Address> optionalAddress = Optional.of(new Address());
-        Calendar calendar = Calendar.getInstance();
-
-        Firestation firestation = new Firestation();
-        firestation.setName("Firestation 4");
-        firestation.setId(4L);
-
-        Medicine medicine1 = new Medicine();
-        medicine1.setId(5L);
-        medicine1.setName("hydrapermazol");
-        medicine1.setDosage_mg(100);
-
-        Medicine medicine2 = new Medicine();
-        medicine2.setId(4L);
-        medicine2.setName("dodoxadin");
-        medicine2.setDosage_mg(30);
-
-        PatientMedicine patientMedicine1 = new PatientMedicine();
-        patientMedicine1.setQuantity(3);
-        patientMedicine1.setMedicineId(medicine1);
-
-        PatientMedicine patientMedicine2 = new PatientMedicine();
-        patientMedicine2.setQuantity(1);
-        patientMedicine2.setMedicineId(medicine2);
-
-        Allergy allergy1 = new Allergy();
-        allergy1.setId(5L);
-        allergy1.setName("shellfish");
-
-        Person person1 = new Person();
-        person1.setId(10L);
-        person1.setFirstName("Tony");
-        person1.setLastName("COOPER");
-        calendar.set(1994, 3, 6);
-        person1.setBirthday(calendar.getTime());
-        person1.setPhone("8418746874");
-        person1.setEmail("tcoop@ymail.com");
-        person1.setMedicines(Arrays.asList(patientMedicine1, patientMedicine2));
-        person1.setAllergies(Arrays.asList(allergy1));
-
-        Person person2 = new Person();
-        person2.setId(17L);
-        person2.setFirstName("Ron");
-        person2.setLastName("PETERS");
-        calendar.set(1965, 4, 6);
-        person2.setBirthday(calendar.getTime());
-        person2.setPhone("8418748888");
-        person2.setEmail("jpeter@email.com");
-
-        Allergy allergy2 = new Allergy();
-        allergy2.setId(3L);
-        allergy2.setName("nillacilan");
-
-        Medicine medicine3 = new Medicine();
-        medicine3.setId(2L);
-        medicine3.setName("aznol");
-        medicine3.setDosage_mg(200);
-
-        PatientMedicine patientMedicine3 = new PatientMedicine();
-        patientMedicine3.setQuantity(1);
-        patientMedicine3.setMedicineId(medicine3);
-
-        Person person3 = new Person();
-        person3.setId(18L);
-        person3.setFirstName("Allison");
-        person3.setLastName("BOYD");
-        calendar.set(1965, 3, 15);
-        person3.setBirthday(calendar.getTime());
-        person3.setPhone("8418749888");
-        person3.setEmail("aly@imail.com");
-        person3.setAllergies(Arrays.asList(allergy2));
-        person3.setMedicines(Arrays.asList(patientMedicine3));
-
-        optionalAddress.get().setId(6L);
-        optionalAddress.get().setAddress("112 Steppes Pl");
-        optionalAddress.get().setCity("Culver");
-        optionalAddress.get().setZip("97451");
-        optionalAddress.get().setFirestation(firestation);
-        optionalAddress.get().setPersons(Arrays.asList(person1, person2, person3));
-        return optionalAddress;
     }
 
     private Optional<Person> makePerson() {

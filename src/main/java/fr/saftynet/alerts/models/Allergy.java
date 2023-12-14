@@ -1,7 +1,6 @@
 package fr.saftynet.alerts.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
