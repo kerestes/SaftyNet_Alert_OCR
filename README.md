@@ -108,10 +108,12 @@ Il ne retourne pas les informations de l'adresse, mais en vrai, elles sont bien 
 Il est aussi possible d'informer une liste d'allergie et de medicines
 
 ```agsl
+    http://localhost:8080/person
+    
     {
         "firstName":"Alexandre",
         "lastName":"Kerestes",
-        "birthDay":"1987-11-24",
+        "birthday":"1987-11-24",
         "phone":"1234567890",
         "email":"alexandrekerestes@exemplo.fr",
         "address":{"id":1},
@@ -131,7 +133,7 @@ RÉPONSE :
 
 ```agsl
     {
-        "id": 28,
+        "id": 25,
         "firstName": "Alexandre",
         "lastName": "KERESTES",
         "birthday": "1987-11-24T00:00:00.000+00:00",
@@ -140,31 +142,23 @@ RÉPONSE :
         "allergies": [
             {
                 "id": 4,
-                "name": null
+                "name": "peanut"
             }
         ],
         "medicines": [
             {
                 "quantity": 1,
-                "medicineId": {
-                    "id": 2,
-                    "name": null,
-                    "dosage_mg": 0
-                },
-                "personId": 28
+                "medicineId": null
             },
             {
                 "quantity": 1,
-                "medicineId": {
-                    "id": 3,
-                    "name": null,
-                    "dosage_mg": 0
-                },
-                "personId": 28
+                "medicineId": null
             }
         ]
     }
 ```
+
+Le medicineId return null, mais il a été bien enregistré dans la base de données.
 
 ### <font color=red>Mauvaise requête </font>
 
@@ -672,19 +666,12 @@ Status: 200 OK
                 "dosage_mg": 100
             },
             "personId": 1
-        },
-        {
-            "quantity": 1,
-            "medicineId": {
-                "id": 2,
-                "name": "aznol",
-                "dosage_mg": 200
-            },
-            "personId": 1
         }
     ]
 }
 ```
+
+Le nouveau medicament n'apparaît pas dans la réponse, mais il a été bien enregistré.
 
 ***
 
@@ -735,19 +722,12 @@ Status: 200 OK
                     "dosage_mg": 100
                 },
                 "personId": 1
-            },
-            {
-                "quantity": 4,
-                "medicineId": {
-                    "id": 2,
-                    "name": "aznol",
-                    "dosage_mg": 200
-                },
-                "personId": 1
             }
         ]
     }
 ```
+
+Le nouveau medicament n'apparaît pas dans la réponse, mais il a été bien enregistré.
 
 ### <font color=red>Mauvaise requête </font>
 
@@ -830,7 +810,7 @@ RÉPONSE :
 
 ***
 
-<font color=blue>**DELETE** -></font> "/medicalrecord/{id}"
+<font color=blue>**DELETE** -></font> "/allergy/{personId}/{allergyId}"
 
 ### <font color=green>Bonne requête </font>
 
@@ -1499,7 +1479,7 @@ Réponse :
         "zip": "97451",
         "firestation": {
             "id": 2,
-            "name": "Fire Station 2"
+            "name": "Firestation 2"
         },
         "persons": [
             {
@@ -1530,8 +1510,7 @@ Réponse :
                             "id": 1,
                             "name": "aznol",
                             "dosage_mg": 60
-                        },
-                        "personId": 12
+                        }
                     },
                     {
                         "quantity": 9,
@@ -1539,8 +1518,7 @@ Réponse :
                             "id": 5,
                             "name": "hydrapermazol",
                             "dosage_mg": 100
-                        },
-                        "personId": 12
+                        }
                     },
                     {
                         "quantity": 2,
@@ -1548,8 +1526,7 @@ Réponse :
                             "id": 9,
                             "name": "pharmacol",
                             "dosage_mg": 2500
-                        },
-                        "personId": 12
+                        }
                     },
                     {
                         "quantity": 1,
@@ -1557,8 +1534,7 @@ Réponse :
                             "id": 12,
                             "name": "terazine",
                             "dosage_mg": 500
-                        },
-                        "personId": 12
+                        }
                     }
                 ]
             },
@@ -1625,8 +1601,8 @@ RÉPONSE :
         "Firestation 1": [
             "8418747784",
             "8418747462",
-            "8418747458",
             "8418746512",
+            "8418747458",
             "8418748547"
         ]
     }
@@ -1780,7 +1756,7 @@ RÉPONSE :
     ]
 ```
 
-### <font color=green>Bonne requête </font>
+### <font color=green>Mauvaise requête </font>
 
 Si l'id n'existe pas la réponse sera un json avec l'erreur.
 

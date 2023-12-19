@@ -1,0 +1,70 @@
+{
+  "Firestation": [
+    {"id": 1, "name": "Firestation 1"},
+    {"id": 2, "name": "Firestation 2"},
+    {"id": 3, "name": "Firestation 3"},
+    {"id": 4, "name": "Firestation 4"}
+  ],
+  "Address": [
+    {"id": 1, "address": "1509 Culver St", "city": "Culver", "zip": "97451", "firestation":3},
+    {"id": 2, "address": "29 15th St", "city": "Culver", "zip": "97451", "firestation":2},
+    {"id": 3, "address": "834 Binoc Ave", "city": "Culver", "zip": "97451", "firestation":3},
+    {"id": 4, "address": "644 Gershwin Cir", "city": "Culver", "zip": "97451", "firestation":1},
+    {"id": 5, "address": "748 Townings Dr", "city": "Culver", "zip": "97451", "firestation":3},
+    {"id": 6, "address": "112 Steppes Pl", "city": "Culver", "zip": "97451", "firestation": 4},
+    {"id": 7, "address": "489 Manchester St", "city": "Culver", "zip": "97451", "firestation": 4},
+    {"id": 8, "address": "892 Downing Ct", "city": "Culver", "zip": "97451", "firestation": 2},
+    {"id": 9, "address": "908 73rd St", "city": "Culver", "zip": "97451", "firestation": 1},
+    {"id": 10, "address": "947 E. Rose Dr", "city": "Culver", "zip": "97451", "firestation": 1},
+    {"id": 11, "address": "951 LoneTree Rd", "city": "Culver", "zip": "97451","firestation": 1}
+  ],
+  "Medicine": [
+    {"id": 1, "name": "aznol", "dosage_mg": 60},
+    {"id": 2, "name": "aznol", "dosage_mg": 200},
+    {"id": 3, "name": "aznol", "dosage_mg": 350},
+    {"id": 4, "name": "dodoxadin", "dosage_mg": 30},
+    {"id": 5, "name": "hydrapermazol", "dosage_mg": 100},
+    {"id": 6, "name": "ibupurin", "dosage_mg": 200},
+    {"id": 7, "name": "noxidian", "dosage_mg": 100},
+    {"id": 8, "name": "noznazol", "dosage_mg": 250},
+    {"id": 9, "name": "pharmacol", "dosage_mg": 2500},
+    {"id": 10, "name": "tetracyclaz", "dosage_mg": 650},
+    {"id": 11, "name": "terazine", "dosage_mg": 10},
+    {"id": 12, "name": "terazine", "dosage_mg": 500},
+    {"id": 13, "name": "thradox", "dosage_mg": 700},
+    {"id": 14, "name": "tradoxidine", "dosage_mg": 400}
+  ],
+  "Allergy": [
+    {"id": 1, "name": "aznol"},
+    {"id": 2, "name": "illisoxian"},
+    {"id": 3, "name": "nillacilan"},
+    {"id": 4, "name": "peanut"},
+    {"id": 5, "name": "shellfish"},
+    {"id": 6, "name": "xilliathal"}
+  ],
+  "Person": [
+    {"id": 1, "first_name": "John", "last_name": "BOYD", "address": 1, "birthday": "1984-03-06", "phone": "8418746512", "email": "jaboyd@email.com", "allergy": [1], "medicine": [{"id": 3, "quantity":  1}, {"id": 5, "quantity":  1}]},
+    {"id": 2, "first_name": "Jacob", "last_name": "BOYD", "address": 1, "birthday": "1989-03-06", "phone": "8418746513", "email": "drk@email.com", "medicine": [{"id": 9, "quantity":  2}, {"id": 11, "quantity":  1}, {"id": 8, "quantity":  1}]},
+    {"id": 3, "first_name": "Tenley", "last_name": "BOYD", "address": 1, "birthday": "2012-02-18", "phone": "8418746512", "email": "tenz@email.com", "allergy": [4]},
+    {"id": 4, "first_name": "Roger", "last_name": "BOYD", "address": 1, "birthday": "2017-06-09", "phone": "8418746512", "email": "jaboyd@email.com"},
+    {"id": 5, "first_name": "Felicia", "last_name": "BOYD", "address": 1, "birthday": "1986-08-01", "phone": "8418746544", "email": "jaboyd@email.com", "allergy": [6], "medicine": [{"id": 10, "quantity":  1}]},
+    {"id": 6, "first_name": "Jonanathan", "last_name": "MARRACK", "address": 2, "birthday": "1989-03-01", "phone": "8418746513", "email": "drk@email.com"},
+    {"id": 7, "first_name": "Tessa", "last_name": "CARMAN", "address": 3, "birthday": "2012-02-18", "phone": "8418746512", "email": "tenz@email.com"},
+    {"id": 8, "first_name": "Peter", "last_name": "DUCAN", "address": 4, "birthday": "2000-09-06", "phone": "8418746512", "email": "jaboyd@email.com", "allergy": [5]},
+    {"id": 9, "first_name": "Foster", "last_name": "SHEPARD", "address": 5, "birthday": "1980-01-08", "phone": "8418746544", "email": "jaboyd@email.com"},
+    {"id": 10, "first_name": "Tony", "last_name": "COOPER", "address": 6, "birthday": "1994-03-06", "phone": "8418746874", "email": "tcoop@ymail.com", "allergy": [5], "medicine": [{"id": 4, "quantity":  1}, {"id": 5, "quantity":  3}]},
+    {"id": 11, "first_name": "Lily", "last_name": "COOPER", "address": 7, "birthday": "1994-03-06", "phone": "8418749845", "email": "lily@email.com"},
+    {"id": 12, "first_name": "Sophia", "last_name": "ZEMICKS", "address": 8, "birthday": "1988-06-03", "phone": "8418747878", "email": "soph@email.com", "allergy": [1, 4, 5], "medicine": [{"id": 1, "quantity":  1}, {"id": 5, "quantity":  9}, {"id": 9, "quantity": 2}, {"id": 12, "quantity": 2}]},
+    {"id": 13, "first_name": "Warren", "last_name": "ZEMICKS", "address": 8, "birthday": "1985-03-06", "phone": "8418747512", "email": "ward@email.com"},
+    {"id": 14, "first_name": "Zach", "last_name": "ZEMICKS", "address": 8, "birthday": "2017-03-06", "phone": "8418747512", "email": "zarc@email.com"},
+    {"id": 15, "first_name": "Reginold", "last_name": "WALKER", "address": 9, "birthday": "1979-08-30", "phone": "8418748547", "email": "reg@email.com", "allergy": [2], "medicine": [{"id": 13, "quantity":  1}]},
+    {"id": 16, "first_name": "Jamie", "last_name": "PETERS", "address": 9, "birthday": "1982-03-06", "phone": "8418747462", "email": "jpeter@email.com"},
+    {"id": 17, "first_name": "Ron", "last_name": "PETERS", "address": 6, "birthday": "1965-04-06", "phone": "8418748888", "email": "jpeter@email.com"},
+    {"id": 18, "first_name": "Allison", "last_name": "BOYD", "address": 6, "birthday": "1965-03-15", "phone": "8418749888", "email": "aly@imail.com", "allergy": [3], "medicine": [{"id": 2, "quantity":  1}]},
+    {"id": 19, "first_name": "Brian", "last_name": "STELZER", "address": 10, "birthday": "1975-12-06", "phone": "8418747784", "email": "bstel@email.com", "allergy": [3], "medicine": [{"id": 5, "quantity":  4}, {"id": 6, "quantity":  1}]},
+    {"id": 20, "first_name": "Shawna", "last_name": "STELZER", "address": 10, "birthday": "1980-07-08", "phone": "8418747784", "email": "ssanw@email.com"},
+    {"id": 21, "first_name": "Kendrik", "last_name": "STELZER", "address": 10, "birthday": "2014-03-06", "phone": "8418747784", "email": "bstel@email.com", "medicine": [{"id": 7, "quantity":  1}, {"id": 9, "quantity":  1}]},
+    {"id": 22, "first_name": "Clive", "last_name": "FERGUNSON", "address": 5, "birthday": "1994-03-06", "phone": "8418746741", "email": "clivfd@ymail.com"},
+    {"id": 23, "first_name": "Eric", "last_name": "CADIGAN", "address": 11, "birthday": "1945-08-06", "phone": "8418747458", "email": "gramps@email.com", "medicine": [{"id": 14, "quantity":  1}]}
+  ]
+}

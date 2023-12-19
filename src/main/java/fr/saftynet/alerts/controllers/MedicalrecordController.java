@@ -3,6 +3,7 @@ package fr.saftynet.alerts.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import fr.saftynet.alerts.jsonReader.JsonReader;
 import fr.saftynet.alerts.models.*;
 import fr.saftynet.alerts.services.*;
 import fr.saftynet.alerts.utilities.JsonDateSerlializer;
@@ -14,7 +15,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -134,7 +137,7 @@ public class MedicalrecordController {
     public JsonNode deleteAllergieFromPerson(@PathVariable final Long personId, @PathVariable final Long allergyId, final HttpServletRequest request){
         if(personId != null && personId > 0){
             if(allergyId != null && allergyId > 0){
-                allergyService.deleteAllergy(personId, allergyId);
+                allergyService.deleteAllergyFromPerson(personId, allergyId);
                 logger.info("(DELETE) /medicine/" + personId + "/" + allergyId + " : request made successfully" );
                 HashMap<String, String> deleteResponse = new HashMap<>();
                 deleteResponse.put("Delete", "If the relationship between Person id (" + personId + ") and Allergy id (" + allergyId + ") exists, it was deleted");

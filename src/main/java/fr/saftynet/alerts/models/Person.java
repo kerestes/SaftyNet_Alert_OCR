@@ -3,6 +3,8 @@ package fr.saftynet.alerts.models;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
@@ -12,7 +14,7 @@ import java.util.*;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Person {
+public class Person implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

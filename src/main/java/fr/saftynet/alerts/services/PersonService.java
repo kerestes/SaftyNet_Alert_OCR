@@ -1,7 +1,7 @@
 package fr.saftynet.alerts.services;
 
 import fr.saftynet.alerts.models.Person;
-import fr.saftynet.alerts.repositories.PersonRepository;
+import fr.saftynet.alerts.repositories.IPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +12,14 @@ import java.util.Optional;
 public class PersonService {
 
     @Autowired
-    private PersonRepository personRepository;
+    private IPersonRepository personRepository;
 
-    public Optional<Person> getPerson(final Long id){return personRepository.findById(id);}
+    public Optional<Person> getPerson(final Long id){return personRepository.getPerson(id);}
 
     public List<String> getEmailPerCity(final String cityName) {return personRepository.getEmailPerCity(cityName);}
 
-    public void delete(final Long id){personRepository.deleteById(id);}
+    public Person savePerson(Person person){ return personRepository.savePerson(person);}
 
-    public Person savePerson(Person person){ return personRepository.save(person);}
+    public void deletePerson(final Long id){personRepository.deletePerson(id);}
 
 }

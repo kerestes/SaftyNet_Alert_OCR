@@ -1,7 +1,7 @@
 package fr.saftynet.alerts.services;
 
 import fr.saftynet.alerts.models.Medicine;
-import fr.saftynet.alerts.repositories.MedicineRepository;
+import fr.saftynet.alerts.repositories.IMedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,9 @@ import java.util.Optional;
 public class MedicineService {
 
     @Autowired
-    private MedicineRepository medicineRepository;
+    private IMedicineRepository medicineRepository;
 
-    public Optional<Medicine> getMedicine(final Long id){return medicineRepository.findById(id);}
+    public Optional<Medicine> getMedicine(final Long id){return medicineRepository.getMedicine(id);}
 
-    public Medicine saveMedicine(Medicine medicine){return medicineRepository.save(medicine);}
+    public Medicine saveMedicine(Medicine medicine){return medicineRepository.saveMedicine(medicine);}
 }

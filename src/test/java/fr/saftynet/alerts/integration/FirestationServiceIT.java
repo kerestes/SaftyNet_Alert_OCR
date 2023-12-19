@@ -5,6 +5,8 @@ import fr.saftynet.alerts.models.Firestation;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.FirestationService;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -52,17 +54,17 @@ public class FirestationServiceIT {
 
     @Test
     public void getPersonsPerFirestationIT(){
-        List<Address> addresses = firestationService.getPersonsPerFirestation(1L);
-        assertEquals(1, addresses.get(0).getPersons().size());
-        assertEquals("CADIGAN", addresses.get(0).getPersons().get(0).getLastName());
-        assertEquals("947 E. Rose Dr", addresses.get(1).getAddress());
+        List<Address> addresses = firestationService.getPersonsPerFirestation(4L);
+        Optional<Address> address = addresses.stream().filter(address1 -> address1.getAddress().equals("489 Manchester St")).findFirst();
+        assertTrue(address.isPresent());
+        assertEquals(1, address.get().getPersons().size());
     }
 
     @Test
     public void addFirestationToAddressIT(){
         Optional<Address> optionalAddress =  addressService.getAddress(1L);
         assertEquals("Firestation 3",  optionalAddress.get().getFirestation().getName());
-        optionalAddress.get().getFirestation().setId(1L);
+        optionalAddress.get().setFirestation(firestationService.getFirestation(1L).get());
         Address address = firestationService.addFirestationToAddress(optionalAddress.get());
         assertEquals("Firestation 1", address.getFirestation().getName());
     }
@@ -97,5 +99,9 @@ public class FirestationServiceIT {
         address = addressService.getAddress(3L);
         assertTrue(address.isPresent());
         assertNull(address.get().getFirestation());
+
+        address = addressService.getAddress(7L);
+        assertTrue(address.isPresent());
+        assertNotNull(address.get().getFirestation());
     }
 }

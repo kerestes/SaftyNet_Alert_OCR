@@ -4,7 +4,10 @@ import fr.saftynet.alerts.models.Address;
 import fr.saftynet.alerts.models.Person;
 import fr.saftynet.alerts.services.PersonService;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PersonServiceIT {
     @Autowired
     PersonService personService;
@@ -37,15 +41,15 @@ public class PersonServiceIT {
     }
 
     @Test
-    public void getEmailPerCityIT(){
+    public void cGetEmailPerCityIT(){
         List<String> emails = personService.getEmailPerCity("Culver");
         assertTrue(!emails.isEmpty());
-        assertEquals(15, emails.size());
+        assertEquals(16, emails.size());
         assertTrue(emails.contains("lily@email.com"));
     }
 
     @Test
-    public void savePersonIT(){
+    public void aSavePersonIT(){
         Calendar calendar = Calendar.getInstance();
 
         Address address = new Address();
@@ -68,7 +72,7 @@ public class PersonServiceIT {
     }
 
     @Test
-    public void deletePersonIT() throws Exception{
+    public void bDeletePersonIT() throws Exception{
         Optional<Person> optionalPerson = personService.getPerson(3L);
         assertTrue(optionalPerson.isPresent());
 

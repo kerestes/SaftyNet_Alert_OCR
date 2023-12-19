@@ -37,6 +37,7 @@ public class AlertsController {
 
     private static final Logger logger = LogManager.getLogger(AlertsController.class);
 
+
     @GetMapping("/personInfo")
     public JsonNode getPersonInfoByLastName(@Param("lastName") final String lastName, final HttpServletRequest request){
         List<Address> addresses = addressService.getPersonByLastName(lastName);

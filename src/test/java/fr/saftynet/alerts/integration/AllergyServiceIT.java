@@ -56,22 +56,22 @@ public class AllergyServiceIT {
 
     @Test
     public void deleteAllergyFromPersonIT() throws Exception {
-        mockMvc.perform(put("/allergy/{personId}", 1).content("{\"allergyId\":1}").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/allergy/{personId}", 1).content("{\"allergyId\":5}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.allergies[-1].name", is("aznol"))
+                        jsonPath("$.allergies[-1].name", is("shellfish"))
                 );
 
         Optional<Person> optinalPerson = personService.getPerson(1L);
 
         assertTrue(optinalPerson.isPresent());
-        assertEquals("aznol", optinalPerson.get().getAllergies().get(optinalPerson.get().getAllergies().size() -1).getName());
+        assertTrue(optinalPerson.get().getAllergies().stream().anyMatch(allergy1 -> allergy1.getName().equals("shellfish")));
 
-        mockMvc.perform(delete("/allergy/{personId}/{allergyId}", 1, 1)).andExpect(status().isOk());
+        mockMvc.perform(delete("/allergy/{personId}/{allergyId}", 1, 5)).andExpect(status().isOk());
 
         optinalPerson = personService.getPerson(1L);
 
         assertTrue(optinalPerson.isPresent());
-        assertNotEquals("aznol", optinalPerson.get().getAllergies().get(optinalPerson.get().getAllergies().size() -1).getName());
+        assertTrue(!optinalPerson.get().getAllergies().stream().anyMatch(allergy1 -> allergy1.getName().equals("shellfish")));
     }
 }

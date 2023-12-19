@@ -31,8 +31,10 @@ public class PersonController {
 
     private static final Logger logger = LogManager.getLogger(PersonController.class);
 
-
-
+    @GetMapping("/teste")
+    public Person p (){
+        return personService.getPerson(1L).get();
+    }
 
     @PostMapping("/person")
     public JsonNode createNewPerson(@RequestBody Person person, final HttpServletRequest request){
@@ -42,7 +44,6 @@ public class PersonController {
                 && person.getPhone() != null && !person.getPhone().isEmpty()
                 && person.getEmail() != null && !person.getEmail().isEmpty()
                 && person.getBirthday() != null ){
-
             person.setLastName(person.getLastName().toUpperCase());
             Person newPerson = personService.savePerson(person);
             if (newPerson != null){
@@ -84,7 +85,7 @@ public class PersonController {
     public JsonNode deletePerson(@PathVariable final Long id, final HttpServletRequest request){
         if(id != null && id > 0){
             logger.info("(DELETE) /person/" + id + ": request made successfully;Made by (" + request.getRemoteAddr() + ")" );
-            personService.delete(id);
+            personService.deletePerson(id);
             return mapper.valueToTree(JsonResponse.deleteResponse(id));
         }
         logger.error("(DELETE) /person/" + id + ": requests error -> Invalid ID ;Made by (" + request.getRemoteAddr() + ")" );
