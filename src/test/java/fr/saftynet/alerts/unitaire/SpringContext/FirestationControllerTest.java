@@ -58,7 +58,7 @@ public class FirestationControllerTest {
         mockMvc.perform(post("/firestation").content("{}").contentType((MediaType.APPLICATION_JSON)))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Name field is missing in the request body"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -69,7 +69,7 @@ public class FirestationControllerTest {
         mockMvc.perform(post("/firestation").content("{\"name\": \"New Firestation\"}").contentType((MediaType.APPLICATION_JSON)))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There was an internal error"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -97,7 +97,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation").content("{}").contentType((MediaType.APPLICATION_JSON)))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Id field is missing in the request body"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -107,7 +107,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation").content("{\"id\":5}").contentType((MediaType.APPLICATION_JSON)))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Name field is missing in the request body"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -118,7 +118,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation").content("{\"id\":5, \"name\": \"Changement de nom\"}").contentType((MediaType.APPLICATION_JSON)))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Firestation does not exists"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -146,7 +146,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation/{id}", 0).content("{}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Id field is missing in the request body"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -156,7 +156,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation/{id}", 3).content("{}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Name field is missing in the request body"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -167,7 +167,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation/{id}", 3).content("{\"name\": \"Changement de nom\"}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Firestation does not exists"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -206,7 +206,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation/toaddress/{id}", 2).content("{}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("firestationId field is missing in the request body"))
+                        jsonPath("$").doesNotExist()
 
                 );
     }
@@ -219,7 +219,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation/toaddress/{id}", 2).content("{\"firestationId\" : 4}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There is no firestaion with this id"))
+                        jsonPath("$").doesNotExist()
 
                 );
     }
@@ -236,7 +236,7 @@ public class FirestationControllerTest {
         mockMvc.perform(put("/firestation/toaddress/{id}", 2).content("{\"firestationId\" : 4}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There is no address with this id"))
+                        jsonPath("$").doesNotExist()
 
                 );
     }
@@ -246,7 +246,7 @@ public class FirestationControllerTest {
         mockMvc.perform(delete("/firestation/{id}", 0))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -255,7 +255,7 @@ public class FirestationControllerTest {
         mockMvc.perform(delete("/firestation/toaddress/{id}", 0))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 

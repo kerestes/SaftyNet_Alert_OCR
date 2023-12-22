@@ -93,7 +93,7 @@ public class PersonControllerTest {
                         "}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There is missing attribute, make sure you entered at least (firstName, lastName, phone, email, birthday and address{id})"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -119,7 +119,7 @@ public class PersonControllerTest {
                         "}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There was an error to save de Person"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -144,7 +144,7 @@ public class PersonControllerTest {
         mockMvc.perform(put("/person").content("{}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("The Person's id must not be null"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -155,7 +155,7 @@ public class PersonControllerTest {
         mockMvc.perform(put("/person").content("{\"id\":28, \"firstName\":\"Robert\"}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There is no person with this id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -180,7 +180,7 @@ public class PersonControllerTest {
         mockMvc.perform(put("/person/{id}", 0).content("{\"firstName\":\"Robert\"}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("The Person's id must not be null"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -191,7 +191,7 @@ public class PersonControllerTest {
         mockMvc.perform(put("/person/{id}", 28).content("{\"firstName\":\"Robert\"}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There is no person with this id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -200,7 +200,7 @@ public class PersonControllerTest {
         mockMvc.perform(delete("/person/{id}", 0))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid ID"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 

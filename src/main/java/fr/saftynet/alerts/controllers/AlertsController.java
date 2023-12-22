@@ -10,7 +10,6 @@ import fr.saftynet.alerts.services.PersonService;
 import fr.saftynet.alerts.utilities.AddressUtility;
 import fr.saftynet.alerts.utilities.FirestationUtility;
 import fr.saftynet.alerts.utilities.JsonDateSerlializer;
-import fr.saftynet.alerts.utilities.JsonResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,8 +44,7 @@ public class AlertsController {
             logger.info("(GET) /personInfo?lastName=" + lastName + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
             return mapper.valueToTree(AddressUtility.removeLastName(addresses, lastName));
         }
-        logger.error("(GET) /personInfo?lastName=" + lastName + " : requests error -> There is no person named " + lastName + "; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is no person named " + lastName));
+        return null;
     }
 
     @GetMapping("/communityEmail")
@@ -56,8 +54,7 @@ public class AlertsController {
             logger.info("(GET) /communityEmail?city=" + city + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
             return mapper.valueToTree(cityName.map(s -> Map.of("Emails from " + s, personService.getEmailPerCity(s))).orElse(null));
         }
-        logger.error("(GET) /communityEmail?city=" + city + " : requests error -> There is no city named " + city + "; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is no city named " + city));
+        return null;
     }
 
     @GetMapping("/childAlert")
@@ -69,11 +66,8 @@ public class AlertsController {
                 logger.info("(GET) /childAlert?address=" + address + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(preparedAddress);
             }
-            logger.error("(GET) /childAlert?address=" + address + " : requests error -> There is no minor in " + preparedAddress.getAddress() + "; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There is no minor in " + preparedAddress.getAddress()));
         }
-        logger.error("(GET) /childAlert?address=" + address + " : requests error -> The address " + address + " does not exists; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("The address " + address + " does not exists"));
+        return null;
     }
 
     @GetMapping("/fire")
@@ -83,8 +77,7 @@ public class AlertsController {
             logger.info("(GET) /fire?address=" + address + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
             return mapper.valueToTree(AddressUtility.changeBirthdayForAge(optionalAddress.get()));
         }
-        logger.error("(GET) /fire?address=" + address + " : requests error -> There is no address named " + address + "; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is no address named " + address));
+        return null;
     }
 
     @GetMapping("/phoneAlert")
@@ -97,12 +90,8 @@ public class AlertsController {
                 logger.info("(GET) /phoneAlert?firestationId=" + firestationId + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(returnHashMap);
             }
-            logger.error("(GET) /phoneAlert?firestationId=" + firestationId + " : requests error -> Firestation does not exist; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exist"));
         }
-        logger.error("(GET) /phoneAlert?firestationId=" + firestationId + " : requests error -> Firestation id must not be null; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Firestation id must not be null"));
-
+        return null;
     }
 
     @GetMapping("/firestation")
@@ -114,10 +103,7 @@ public class AlertsController {
                 logger.info("(GET) /firestation?stationNumber=" + stationNumber + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(AddressUtility.setMinorAndMajorList(addresses));
             }
-            logger.error("(GET) /firestation?stationNumber=" + stationNumber + " : requests error -> Firestation does not exist; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exist"));
         }
-        logger.error("(GET) /phoneAlert?firestationId=" + stationNumber + " : requests error -> StationNumber must not be null; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("StationNumber must not be null"));
+        return null;
     }
 }

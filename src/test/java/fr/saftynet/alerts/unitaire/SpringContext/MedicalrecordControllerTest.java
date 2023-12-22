@@ -59,7 +59,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(post("/addMedicine").content("{\"name\":\"test name\", \"dosage_mg\":100}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There was an error to save medicine"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -69,7 +69,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(post("/addMedicine").content("{ \"dosage_mg\":100}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There is no name or dosage_mg in the request body"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -94,7 +94,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(post("/addAllergy").content("{\"name\":\"Allergy test\"}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There was an error to save medicine"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -104,7 +104,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(post("/addAllergy").content("{}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There is no name in the request body"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -138,7 +138,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(put("/medicine/{personId}", 0).content("{\"quantity\": 2, \"medicineId\": 1}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid Person id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -148,7 +148,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(put("/medicine/{personId}", 1).content("{\"quantity\": 2}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", containsStringIgnoringCase("Invalid Medicine id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -161,7 +161,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(put("/medicine/{personId}", 1).content("{\"quantity\": 2, \"medicineId\": 1}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Person (id=1) or Medicine (id=1) does not exist"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -190,7 +190,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(put("/allergy/{personId}", 0).content("{\"allergyId\" : 1}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid Person id"))
+                        jsonPath("$").doesNotExist()
                 );
 
     }
@@ -201,7 +201,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(put("/allergy/{personId}", 1).content("{}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid Allergy id"))
+                        jsonPath("$").doesNotExist()
                 );
 
     }
@@ -215,7 +215,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(put("/allergy/{personId}", 1).content("{\"allergyId\" : 1}").contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Person (id=1) or Allergy (id=1) does not exist"))
+                        jsonPath("$").doesNotExist()
                 );
 
     }
@@ -225,7 +225,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(delete("/medicine/{personId}/{medicineId}", 0, 1))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid Person Id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -234,7 +234,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(delete("/medicine/{personId}/{medicineId}", 1, 0))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid Medicine Id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -243,7 +243,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(delete("/allergy/{personId}/{medicineId}", 0, 1))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid Person Id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -252,7 +252,7 @@ public class MedicalrecordControllerTest {
         mockMvc.perform(delete("/allergy/{personId}/{medicineId}", 1, 0))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Invalid Allergy Id"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 

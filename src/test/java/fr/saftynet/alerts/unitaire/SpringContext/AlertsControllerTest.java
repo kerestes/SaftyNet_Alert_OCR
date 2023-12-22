@@ -70,7 +70,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/personInfo?lastName={lastName}", "boyd"))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", containsStringIgnoringCase("There is no person named boyd"))
+                        jsonPath("$").doesNotExist()
 
                 );
 
@@ -100,7 +100,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/communityEmail"))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("There is no city named null"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -128,7 +128,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/childAlert")).
                 andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("The address null does not exists"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -143,7 +143,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/childAlert?address={address}", "Downing")).
                 andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", containsStringIgnoringCase("There is no minor in"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -166,7 +166,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/fire"))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", containsStringIgnoringCase("There is no address named"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -194,7 +194,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/phoneAlert"))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Firestation id must not be null"))
+                        jsonPath("$").doesNotExist()
                 );
 
     }
@@ -207,7 +207,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/phoneAlert?firestationId={id}", 1))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Firestation does not exist"))
+                        jsonPath("$").doesNotExist()
                 );
 
     }
@@ -232,7 +232,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/firestation"))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("StationNumber must not be null"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 
@@ -243,7 +243,7 @@ public class AlertsControllerTest {
         mockMvc.perform(get("/firestation?stationNumber={id}", 100))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.Error", is("Firestation does not exist"))
+                        jsonPath("$").doesNotExist()
                 );
     }
 

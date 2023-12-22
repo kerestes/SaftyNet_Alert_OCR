@@ -8,7 +8,6 @@ import fr.saftynet.alerts.models.Firestation;
 import fr.saftynet.alerts.services.AddressService;
 import fr.saftynet.alerts.services.FirestationService;
 import fr.saftynet.alerts.utilities.JsonDateSerlializer;
-import fr.saftynet.alerts.utilities.JsonResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,11 +38,8 @@ public class FirestationController {
                 logger.info("(POST) /firestation : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(saveFirestation);
             }
-            logger.info("(POST) /firestation : requests error -> There was an internal error; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There was an internal error"));
         }
-        logger.error("(POST) /firestation : requests error -> Name field is missing in the request body; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Name field is missing in the request body"));
+        return null;
     }
 
     @PutMapping("/firestation")
@@ -57,14 +53,9 @@ public class FirestationController {
                     logger.info("(PUT) /firestation : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                     return mapper.valueToTree(savedFirestation);
                 }
-                logger.error("(PUT) /firestation : requests error -> Firestation does not exists; Made by (" + request.getRemoteAddr() + ")" );
-                return mapper.valueToTree(JsonResponse.errorResponse("Firestation does not exists"));
             }
-            logger.error("(PUT) /firestation : requests error -> Name field is missing in the request body; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Name field is missing in the request body"));
         }
-        logger.error("(PUT) /firestation : requests error -> Id field is missing in the request body; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Id field is missing in the request body"));
+        return null;
     }
 
     @PutMapping("/firestation/{id}")
@@ -87,14 +78,9 @@ public class FirestationController {
                     logger.info("(PUT) /firestation/toaddress/" + id + ", request body -> firestationId = " + firestationId + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                     return mapper.valueToTree(address);
                 }
-                logger.error("(PUT) /firestation/toaddress/" + id + " : requests error -> There is no address with this id : " + id + "; Made by (" + request.getRemoteAddr() + ")" );
-                return mapper.valueToTree(JsonResponse.errorResponse("There is no address with this id"));
             }
-            logger.error("(PUT) /firestation/toaddress/" + id + " : requests error -> There is no firestaion with this id : "+ firestationId +"; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There is no firestaion with this id"));
         }
-        logger.error("(PUT) /firestation/toaddress/" + id + " : requests error -> firestationId field is missing in the request body; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("firestationId field is missing in the request body"));
+        return null;
     }
 
     @DeleteMapping("/firestation/{id}")
@@ -102,10 +88,8 @@ public class FirestationController {
         if (id != null && id>0){
             firestationService.deleteFirestation(id);
             logger.info("(DELETE) /firestation/" + id + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.deleteResponse(id));
         }
-        logger.error("(DELETE) /firestation/" + id + " : requests error -> Invalid id; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Invalid id"));
+        return null;
     }
 
     @DeleteMapping("/firestation/toaddress/{id}")
@@ -113,10 +97,8 @@ public class FirestationController {
         if(id != null && id>0){
             logger.info("(DELETE) /firestation/toaddress/" + id + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
             firestationService.deleteMappingFirestation(id);
-            return mapper.valueToTree(JsonResponse.deleteResponse(id));
         }
-        logger.error("(DELETE) /firestation/" + id + " : requests error -> Invalid id; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Invalid id"));
+        return null;
     }
 
 }

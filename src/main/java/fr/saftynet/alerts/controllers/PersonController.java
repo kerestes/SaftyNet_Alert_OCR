@@ -52,11 +52,8 @@ public class PersonController {
                 logger.info("(POST) /person : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(personService.getPerson(newPerson.getId()).get());
             }
-            logger.error("(POST) /person : requests error -> There was an error to save de Person; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There was an error to save de Person"));
         }
-        logger.error("(POST) /person : requests error -> There is a missing attribute, make sure you entered at least (firstName, lastName, phone, email, birthday and address{id}); Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is missing attribute, make sure you entered at least (firstName, lastName, phone, email, birthday and address{id})"));
+        return null;
     }
 
     @PutMapping("/person")
@@ -68,11 +65,8 @@ public class PersonController {
                 logger.info("(PUT) /person : request body -> id = " + person.getId() + ": request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(personService.savePerson(person));
             }
-            logger.error("(PUT) /person : requests error -> There is no person with this id; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There is no person with this id"));
         }
-        logger.error("(PUT) /person : requests error -> The Person's id must not be null; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("The Person's id must not be null"));
+        return null;
     }
 
     @PutMapping("/person/{id}")
@@ -86,9 +80,7 @@ public class PersonController {
         if(id != null && id > 0){
             logger.info("(DELETE) /person/" + id + ": request made successfully;Made by (" + request.getRemoteAddr() + ")" );
             personService.deletePerson(id);
-            return mapper.valueToTree(JsonResponse.deleteResponse(id));
         }
-        logger.error("(DELETE) /person/" + id + ": requests error -> Invalid ID ;Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Invalid ID"));
+        return null;
     }
 }

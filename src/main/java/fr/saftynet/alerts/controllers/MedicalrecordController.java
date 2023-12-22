@@ -3,11 +3,9 @@ package fr.saftynet.alerts.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import fr.saftynet.alerts.jsonReader.JsonReader;
 import fr.saftynet.alerts.models.*;
 import fr.saftynet.alerts.services.*;
 import fr.saftynet.alerts.utilities.JsonDateSerlializer;
-import fr.saftynet.alerts.utilities.JsonResponse;
 import fr.saftynet.alerts.utilities.MedicalRecordUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
@@ -15,9 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -47,11 +43,8 @@ public class MedicalrecordController {
                 logger.info("(POST) /addMedicine : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(optionalMedicine.get());
             }
-            logger.error("(POST) /addMedicine : requests error -> There was an error to save medicine; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There was an error to save medicine"));
         }
-        logger.error("(POST) /addMedicine : requests error -> There is no name or dosage_mg in the request body; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is no name or dosage_mg in the request body"));
+        return null;
     }
 
     @PostMapping("/addAllergy")
@@ -64,11 +57,8 @@ public class MedicalrecordController {
                 logger.info("(POST) /addAllergy : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                 return mapper.valueToTree(optionalAllergy.get());
             }
-            logger.error("(POST) /addAllergy : requests error -> There was an error to save allergy; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("There was an error to save medicine"));
         }
-        logger.error("(POST) /addAllergy : requests error -> There is no name in the request body; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("There is no name in the request body"));
+        return null;
     }
 
     @PutMapping("/medicine/{personId}")
@@ -85,14 +75,9 @@ public class MedicalrecordController {
                     logger.info("(PUT) /medicine/" + personId + ", request body -> medicineId = " + realMedicineId + ", quantity = " + quantity + ": request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                     return mapper.valueToTree(personService.getPerson(personId).get());
                 }
-                logger.error("(PUT) /medicine/" + personId + " : requests error -> Person (id=" + personId +") or Medicine (id=" + realMedicineId + ") does not exist; Made by (" + request.getRemoteAddr() + ")" );
-                return mapper.valueToTree(JsonResponse.errorResponse("Person (id=" + personId +") or Medicine (id=" + realMedicineId + ") does not exist"));
             }
-            logger.error("(PUT) /medicine/" + personId + " : requests error -> Invalid Medicine id; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Invalid Medicine id"));
         }
-        logger.error("(PUT) /medicine/" + personId + " : requests error -> Invalid Person id; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Invalid Person id"));
+        return null;
     }
 
     @PutMapping("/allergy/{personId}")
@@ -106,14 +91,9 @@ public class MedicalrecordController {
                     logger.info("(PUT) /allergy/" + personId + ", request body -> allergyId = " + allergyId + " : request made successfully; Made by (" + request.getRemoteAddr() + ")" );
                     return mapper.valueToTree(personService.savePerson(MedicalRecordUtility.addAllergy(optionalPerson.get(), optionalAllergy.get())));
                 }
-                logger.error("(PUT) /allergy/" + personId + ", request error -> Person (id=" + personId +") or Allergy (id=" + allergyId + ") does not exist; Made by (" + request.getRemoteAddr() + ")" );
-                return mapper.valueToTree(JsonResponse.errorResponse("Person (id=" + personId +") or Allergy (id=" + allergyId + ") does not exist"));
             }
-            logger.error("(PUT) /allergy/" + personId + ", request error -> Invalid Allergy id; Made by (" + request.getRemoteAddr() + ")" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Invalid Allergy id"));
         }
-        logger.error("(PUT) /allergy/" + personId + ", request error -> Invalid Person id; Made by (" + request.getRemoteAddr() + ")" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Invalid Person id"));
+        return null;
     }
 
     @DeleteMapping("/medicine/{personId}/{medicineId}")
@@ -126,11 +106,8 @@ public class MedicalrecordController {
                 deleteResponse.put("Delete", "If the relationship between Person id (" + personId + ") and Medicine id (" + medicineId + ") exists, it was deleted");
                 return mapper.valueToTree(deleteResponse);
             }
-            logger.error("(DELETE) /medicine/" + personId + "/" + medicineId + " : Invalid Medicine Id" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Invalid Medicine Id"));
         }
-        logger.error("(DELETE) /medicine/" + personId + "/" + medicineId + " : Invalid Person Id" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Invalid Person Id"));
+        return null;
     }
 
     @DeleteMapping("/allergy/{personId}/{allergyId}")
@@ -143,11 +120,8 @@ public class MedicalrecordController {
                 deleteResponse.put("Delete", "If the relationship between Person id (" + personId + ") and Allergy id (" + allergyId + ") exists, it was deleted");
                 return mapper.valueToTree(deleteResponse);
             }
-            logger.error("(DELETE) /medicine/" + personId + "/" + allergyId + " : Invalid Allergy Id" );
-            return mapper.valueToTree(JsonResponse.errorResponse("Invalid Allergy Id"));
         }
-        logger.error("(DELETE) /medicine/" + personId + "/" + allergyId + " : Invalid Person Id" );
-        return mapper.valueToTree(JsonResponse.errorResponse("Invalid Person Id"));
+        return null;
     }
 
 }

@@ -11,37 +11,37 @@ public class AppConfig {
 
     @Bean
     public IAddressRepository addressRepository(){
-        //return new AddressRepositoryDbImpl();
-        return new AddressRepositoryJsonImpl();
+        return new AddressRepositoryDbImpl();
+        //return new AddressRepositoryJsonImpl();
     }
 
     @Bean
     public IAllergyRepository allergyRepository(){
-        //return new AllergyRepositoryDbImpl();
-        return new AllergyRepositoryJsonImpl();
+        return new AllergyRepositoryDbImpl();
+        //return new AllergyRepositoryJsonImpl();
     }
 
     @Bean
     public IMedicineRepository medicineRepository(){
-        //return new MedicineRepositoryDbImpl();
-        return new MedicineRepositoryJsonImpl();
+        return new MedicineRepositoryDbImpl();
+        //return new MedicineRepositoryJsonImpl();
     }
 
     @Bean
     public IFirestationRepository firestationRepository(){
-        //return new FirestationRepositoryDbImpl();
-        return new FirestationRepositoryJsonImpl();
+        return new FirestationRepositoryDbImpl();
+        //return new FirestationRepositoryJsonImpl();
     }
 
     @Bean
     public IPatientMedicineRepository patientMedicineRepository(){
-        //return new PatientMedicineRepositoryDbImpl();
-        return new PatientMedicineRepositoryJsonImpl();
+        return new PatientMedicineRepositoryDbImpl();
+        //return new PatientMedicineRepositoryJsonImpl();
     }
 
     @Bean
     public IPersonRepository personRepository(){
-        //return new PersonRepositoryDbImpl();
-        return new PersonRepositoryJsonImpl();
+        return new PersonRepositoryDbImpl();
+        //return new PersonRepositoryJsonImpl();
     }
 }
